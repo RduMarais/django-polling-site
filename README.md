@@ -1,5 +1,9 @@
 # django-polling_site
 
+> forked from https://github.com/aahnik/django-polling-site
+>
+> **BE AWARE THAT THERE IS A DEFAULT SUPERUSER CREATED ON THE ORIGINAL PROJECT**
+
 django-polling_site ( Life's First Django Project)
 
 [![GitHub license](https://img.shields.io/github/license/aahnik/django-polling_site)](https://github.com/aahnik/django-polling_site/blob/master/LICENSE)

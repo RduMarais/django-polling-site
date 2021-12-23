@@ -8,7 +8,7 @@ import os
 
 def index(request):
     # NOTE PUT ABSOLUTE PATH OF homePage.yaml here
-    with open('__PUT ABSOLUTE PATH OF homePage.yaml here__', 'r') as file:
+    with open('/Users/romain/Stratus/info/server/tests_beekast/django-polling-site/pollsite/home/homePage.yaml', 'r') as file:
         homePageElements = yaml.full_load(file)
     stats = {
         'forks': 10,

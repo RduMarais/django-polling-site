@@ -8,6 +8,7 @@ class Question(models.Model):
     desc = models.TextField('Description', max_length=200)
     pub_date = models.DateTimeField('Date Published')
     featured = models.BooleanField('Feature in Featured Polls Page')
+    is_public = models.BooleanField('Is public in polls page',default=False)
 
     def __str__(self):
         return self.title
