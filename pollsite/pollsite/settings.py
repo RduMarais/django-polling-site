@@ -36,6 +36,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'poll.apps.PollConfig',
+    'django_toggle_switch_widget',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
