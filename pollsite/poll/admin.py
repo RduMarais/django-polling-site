@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Question, Choice
+from .models import Question, Choice, Meeting
 
 
 class ChoiceInline(admin.TabularInline):
@@ -20,4 +20,18 @@ class QuestionAdmin(admin.ModelAdmin):
     search_fields = ['title']
 
 
+class QuestionsOrder(admin.TabularInline):
+    model = Question
+    extra = 1
+
+class MeetingAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['title','desc','meeting_date']}),
+    ]
+    inlines = [QuestionsOrder]
+    list_display = ('title', 'activities')
+    list_filter = ['meeting_date']
+    search_fields = ['title']
+
 admin.site.register(Question, QuestionAdmin)
+admin.site.register(Meeting, MeetingAdmin)

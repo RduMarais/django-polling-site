@@ -8,6 +8,14 @@ QUESTION_TYPES = (
         ('WC', 'Word Cloud'),
     )
 
+class Meeting(models.Model):
+    title = models.CharField('Title of Meeting', max_length=50)
+    desc = models.TextField('Description', max_length=200)
+    meeting_date = models.DateTimeField('Date Published',default=timezone.now)
+
+    def activities(self):
+        return len(self.question_set.all())
+
 class Question(models.Model):
     title = models.CharField('Question', max_length=50)
     desc = models.TextField('Description', max_length=200)
@@ -15,6 +23,7 @@ class Question(models.Model):
     featured = models.BooleanField('Feature in Featured Polls Page')
     is_public = models.BooleanField('Is public in polls page',default=False)
     question_type = models.CharField('Type of Question', max_length=2,choices=QUESTION_TYPES, default='PL')
+    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
