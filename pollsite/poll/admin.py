@@ -15,7 +15,7 @@ class QuestionAdmin(admin.ModelAdmin):
         ('Date Information', {'fields': ['pub_date']}),
     ]
     inlines = [ChoiceInline]
-    list_display = ('title', 'is_public', 'recent', 'pub_date', 'participants')
+    list_display = ('title', 'question_type','is_public', 'recent', 'pub_date', 'participants')
     list_filter = ['pub_date']
     search_fields = ['title']
 
