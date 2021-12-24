@@ -7,7 +7,6 @@ from .models import Choice, Question
 
 def index(request):
     latest_question_list = Question.objects.filter(is_public=True).order_by('-pub_date')
-    print(type(latest_question_list))
     context = {'latest_question_list': latest_question_list}
     return render(request, 'poll/index', context)
 

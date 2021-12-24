@@ -5,7 +5,7 @@ from .models import Question, Choice, Meeting
 
 class ChoiceInline(admin.TabularInline):
     model = Choice
-    extra = 2
+    extra = 1
 
 
 class QuestionAdmin(admin.ModelAdmin):
@@ -15,7 +15,8 @@ class QuestionAdmin(admin.ModelAdmin):
         ('Date Information', {'fields': ['pub_date']}),
     ]
     inlines = [ChoiceInline]
-    list_display = ('title', 'question_type','is_public', 'recent', 'pub_date', 'participants')
+    list_display = ('title', 'question_type','is_public', 'pub_date', 'participants') 
+    # also 'recent is avzailable'
     list_filter = ['pub_date']
     search_fields = ['title']
 
@@ -29,9 +30,9 @@ class MeetingAdmin(admin.ModelAdmin):
         (None, {'fields': ['title','desc','meeting_date']}),
     ]
     inlines = [QuestionsOrder]
-    list_display = ('title', 'activities')
+    list_display = ('title', 'activities','meeting_date')
     list_filter = ['meeting_date']
-    search_fields = ['title']
+    # search_fields = ['title']
 
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Meeting, MeetingAdmin)

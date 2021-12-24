@@ -49,7 +49,6 @@ class Question(models.Model):
                 is_quizz = True
         if(is_quizz):
             self.question_type = "QZ"
-            print("yes")
         super(Question, self).save(*args, **kwargs)
 
     recent.admin_order_field = 'pub_date'
