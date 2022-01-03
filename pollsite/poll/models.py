@@ -11,10 +11,15 @@ QUESTION_TYPES = (
 class Meeting(models.Model):
     title = models.CharField('Title of Meeting', max_length=50)
     desc = models.TextField('Description', max_length=200)
+    code = models.CharField('Security Code for joining the Meeting', default='P1F02021', max_length=50)
     meeting_date = models.DateTimeField('Date Published',default=timezone.now)
 
     def activities(self):
         return len(self.question_set.all())
+
+class Attendee(models.Model):
+    name = models.CharField('Your Name', max_length=50, default='Anonymous')
+    
 
 class Question(models.Model):
     title = models.CharField('Question', max_length=50)
