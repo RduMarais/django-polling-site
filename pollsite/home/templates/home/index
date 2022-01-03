@@ -2,7 +2,7 @@
 
 {% block title  %}
 
-<title>PROUT PROUT</title>
+<title>HOME</title>
 
 {% endblock  %}
 
