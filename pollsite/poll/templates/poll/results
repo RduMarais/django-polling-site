@@ -9,6 +9,35 @@
 {% block content  %}
 <h1>{{ question.title }}</h1>
 
+{% if question.question_type == 'WC' %}
+<div id="wordcloud_container">
+    <script>
+        anychart.onDocumentReady(function() {
+            var data = [
+                {% for choice in question.choice_set.all %}
+                {"x": "{{ choice.choice_text}}", "value": {{ choice.votes }}},
+                {% endfor %}
+            ]
+            // create a tag (word) cloud chart
+            var chart = anychart.tagCloud(data);
+    
+            // set a chart title
+            chart.title('{{ question.title }}')
+            // set an array of angles at which the words will be laid out
+            chart.angles([0])
+            // enable a color range
+            // chart.colorRange(true);
+            // set the color range length
+            // chart.colorRange().length('80%');
+            // display the word cloud chart
+            chart.container("wordcloud_container");
+            chart.draw();
+        });
+    </script>
+</div>
+
+{% else %}
+
 <ul>
     {% for choice in question.choice_set.all %}
     <br>
@@ -16,10 +45,9 @@
     {% endfor %}
 </ul>
 
-<h1>the looks of this page sucks!! I know that ...
-    I AM NOT A FRONTEND DEV, i work mainly on backend, my work is to implement functionality
-    not to visually appeal you
-    If you know frontend , contribute improvements to this page
+{% endif %}
+
+<h1>the looks of this page sucks!! TODO
 </h1>
 <br>
 <a href="https://github.com/aahnik/django-polling_site">GitHub Repo</a>
