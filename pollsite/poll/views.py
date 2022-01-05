@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from .models import Choice, Question
+from .forms import WordForm
 
 
 def index(request):
@@ -10,8 +11,28 @@ def index(request):
     context = {'latest_question_list': latest_question_list}
     return render(request, 'poll/index', context)
 
-    # to:LEARN add pagination
+def added(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    form = WordForm()
+    return render(request, 'poll/add', {'question': question,'form':form})
 
+def add(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    if request.method == 'POST':
+        form = WordForm(request.POST)
+        if(form.is_valid()):
+            try:
+                existing_choice = question.choice_set.get(choice_text=form.cleaned_data['choice'])
+                existing_choice.votes +=1
+                existing_choice.save()
+            except (KeyError, Choice.DoesNotExist):
+                print("DOES NOT EXIST")
+                added_choice = Choice(question=question, choice_text=form.cleaned_data['choice'], votes=1)
+                added_choice.save()
+            return HttpResponseRedirect(reverse('poll:added', args=(question_id,)))
+    else:
+        form = WordForm()
+    return render(request, 'poll/add', {'question': question,'form':form})
 
 def results(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -20,7 +41,6 @@ def results(request, question_id):
 
 def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
-    print(question.question_type)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):

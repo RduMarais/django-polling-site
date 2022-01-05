@@ -21,11 +21,3 @@
     <input type="submit" value="Vote">
 </form>
 {% endblock  %}
-<br>
-<h1>the looks of this page sucks!! I know that ...
-    I AM NOT A FRONTEND DEV, i work mainly on backend, my work is to implement functionality
-    not to visually appeal you
-    If you know frontend , contribute improvements to this page
-</h1>
-<br>
-<a href="https://github.com/aahnik/django-polling_site">GitHub Repo</a>

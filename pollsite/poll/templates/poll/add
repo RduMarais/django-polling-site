@@ -2,18 +2,17 @@
 
 {% block title  %}
 
-<title>Canvas Results of a Poll</title>
+<title>Canvas Word Cloud</title>
 
 {% endblock  %}
 
 {% block content  %}
 <h1>{{ question.title }}</h1>
 
-{% if question.question_type == 'WC' %}
 <div id="wordcloud_input">
-    <form action="{% url 'poll:vote' question.id %}" method="post"> 
+    <form action="{% url 'poll:add' question.id %}" method="post"> 
         {% csrf_token %}
-        <input type="text" id="choice" name="choice" placeholder="your word">
+        {{ form }}
         <input type="submit" value="Add">
     </form>
 </div>
@@ -42,17 +41,6 @@
         });
     </script>
 </div>
-
-{% else %}
-
-<ul>
-    {% for choice in question.choice_set.all %}
-    <br>
-    <li>{{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}</li>
-    {% endfor %}
-</ul>
-
-{% endif %}
 
 <h1>the looks of this page sucks!! TODO
 </h1>
