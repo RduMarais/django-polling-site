@@ -2,6 +2,9 @@ from django.db import models
 import datetime
 from django.utils import timezone
 
+from adminsortable.models import SortableMixin
+from adminsortable.fields import SortableForeignKey
+
 QUESTION_TYPES = (
         ('PL', 'Poll'),
         ('QZ', 'Quizz'),
@@ -21,14 +24,20 @@ class Attendee(models.Model):
     name = models.CharField('Your Name', max_length=50, default='Anonymous')
     
 
-class Question(models.Model):
+class Question(SortableMixin):
     title = models.CharField('Question', max_length=50)
     desc = models.TextField('Description', max_length=200)
     pub_date = models.DateTimeField('Date Published')
     featured = models.BooleanField('Feature in Featured Polls Page')
     is_public = models.BooleanField('Is public in polls page',default=False)
     question_type = models.CharField('Type of Question', max_length=2,choices=QUESTION_TYPES, default='PL')
-    meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+    meeting = SortableForeignKey(Meeting, on_delete=models.CASCADE)
+    question_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
+
+    class Meta:
+        # https://docs.djangoproject.com/en/4.0/ref/models/options/#order-with-respect-to
+        # order_with_respect_to = 'meeting'
+        ordering = ['question_order'] 
 
     def __str__(self):
         return self.title

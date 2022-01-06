@@ -3,6 +3,8 @@ from django_toggle_switch_widget.widgets import DjangoToggleSwitchWidget
 from django.utils.html import format_html
 from django.urls import reverse
 
+from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
+
 from .models import Question, Choice, Meeting
 
 class ChoiceInline(admin.TabularInline):
@@ -28,11 +30,11 @@ class QuestionAdmin(admin.ModelAdmin):
         return format_html('<a href="%s">%s</a>' % (link,obj.meeting.title))
 
 
-class QuestionsOrder(admin.TabularInline):
+class QuestionsOrder(SortableStackedInline):
     model = Question
     extra = 1
 
-class MeetingAdmin(admin.ModelAdmin):
+class MeetingAdmin(NonSortableParentAdmin):
     fieldsets = [
         (None, {'fields': ['title','desc','has_started']}),
     ]
