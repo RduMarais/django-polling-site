@@ -8,17 +8,13 @@ from .forms import WordForm
 
 
 def index(request):
-    latest_question_list = Question.objects.filter(is_done=True).order_by('-pub_date')
     meetings_list = Meeting.objects.filter(has_started=True)
-    context = {
-        'latest_question_list': latest_question_list,
-        'meetings':meetings_list,
-    }
+    context = {'meetings':meetings_list }
     return render(request, 'poll/index', context)
 
 def meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
-    return render(request, 'poll/meeting', {'question_list': meeting.question_set.all() })
+    return render(request, 'poll/meeting', {'question_list': meeting.question_set.all().order_by('question_order') })
 
 def added(request, question_id):
     question = get_object_or_404(Question, pk=question_id)

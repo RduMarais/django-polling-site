@@ -32,7 +32,9 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class QuestionsOrder(SortableStackedInline):
     model = Question
-    extra = 1
+    extra = 0
+    fields = ['title','is_done']
+    readonly_fields = ['question_type']
 
 class MeetingAdmin(NonSortableParentAdmin):
     fieldsets = [
