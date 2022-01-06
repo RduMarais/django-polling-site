@@ -8,7 +8,7 @@ from .forms import WordForm
 
 
 def index(request):
-    latest_question_list = Question.objects.filter(is_public=True).order_by('-pub_date')
+    latest_question_list = Question.objects.filter(is_done=True).order_by('-pub_date')
     meetings_list = Meeting.objects.filter(has_started=True)
     context = {
         'latest_question_list': latest_question_list,

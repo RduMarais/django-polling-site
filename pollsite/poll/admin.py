@@ -14,14 +14,14 @@ class ChoiceInline(admin.TabularInline):
 
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['featured','is_public','question_type']}),
+        (None, {'fields': ['question_type','is_done']}),
         ('Question Information', {'fields': ['title', 'desc']}),
         ('Date Information', {'fields': ['pub_date']}),
     ]
     inlines = [ChoiceInline]
-    list_display = ('title', 'question_type','is_public', 'get_meeting', 'participants') 
+    list_display = ('title', 'question_type','is_done', 'get_meeting', 'participants') 
     # also 'recent' and 'pub_date' are available
-    list_editable = ('is_public',)
+    list_editable = ('is_done',)
     list_filter = ['pub_date']
     search_fields = ['title']
 
