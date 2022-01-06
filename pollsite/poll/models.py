@@ -12,7 +12,8 @@ class Meeting(models.Model):
     title = models.CharField('Title of Meeting', max_length=50)
     desc = models.TextField('Description', max_length=200)
     code = models.CharField('Security Code for joining the Meeting', default='P1F02021', max_length=50)
-    meeting_date = models.DateTimeField('Date Published',default=timezone.now)
+    meeting_date_start = models.DateTimeField('Date of start',default=timezone.now)
+    meeting_date_stop = models.DateTimeField('Date of end',default=timezone.now)
 
     def activities(self):
         return len(self.question_set.all())
