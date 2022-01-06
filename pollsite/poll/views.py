@@ -18,7 +18,7 @@ def index(request):
 
 def meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
-    return render(request, 'poll/meeting', {'meeting': meeting})
+    return render(request, 'poll/meeting', {'question_list': meeting.question_set.all() })
 
 def added(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
