@@ -34,11 +34,11 @@ class QuestionsOrder(admin.TabularInline):
 
 class MeetingAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['title','desc','meeting_date_start','meeting_date_stop']}),
+        (None, {'fields': ['title','desc','has_started']}),
     ]
     inlines = [QuestionsOrder]
-    list_display = ('title', 'activities','meeting_date_start','meeting_date_stop')
-    list_filter = ['meeting_date_start']
+    list_display = ('title', 'activities','has_started')
+    list_filter = ['has_started']
     # search_fields = ['title']
 
 admin.site.register(Question, QuestionAdmin)

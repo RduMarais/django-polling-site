@@ -2,29 +2,35 @@
 
 {% block title  %}
 
-<title>Canvass Meeting</title>
+<title>Canvass All Polls</title>
 
 {% endblock  %}
 
 {% block content  %}
 
-{% if meetings %}
+{% if latest_question_list %}
 <section class="text-gray-700 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
         <div class="-my-8">
-            {% for meeting in meetings %}
+            {% for question in latest_question_list %}
             <div class="py-8 flex flex-wrap md:flex-no-wrap">
                 <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-                    <span class="tracking-widest font-medium title-font text-gray-900">{{meeting.pub_date.date}}</span>
-                    <span class="mt-1 text-gray-500 text-sm">{{ meeting.activities.count }} Activities Received </span>
+                    <span class="tracking-widest font-medium title-font text-gray-900">{{question.pub_date.date}}</span>
+                    <span class="mt-1 text-gray-500 text-sm">{{question.participants}} Votes Received </span>
                 </div>
                 <div class="md:flex-grow">
 
-                    <h2 class="text-2xl font-medium text-gray-900 title-font mb-2">{{meeting.title }}</h2>
-                    <p class="leading-relaxed">{{meeting.desc}}
+                    <h2 class="text-2xl font-medium text-gray-900 title-font mb-2">{{question.title }}</h2>
+                    <p class="leading-relaxed">{{question.desc}}
                     </p>
                     {% comment %} FINDME {% endcomment %}
-                    <a href="{% url 'poll:meeting' meeting.id %}" class="text-green-500 inline-flex items-center mt-4">Join Meeting
+
+                    {% if question.question_type == 'WC' %}
+                    <a href="{% url 'poll:add' question.id %}" class="text-green-500 inline-flex items-center mt-4">
+                    {% else %}
+                    <a href="{% url 'poll:vote' question.id %}" class="text-green-500 inline-flex items-center mt-4">
+                    {% endif %}
+                        Vote Now
                         <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M5 12h14"></path>
@@ -39,7 +45,8 @@
     </div>
 </section>
 {% else %}
-<p>No meetings availaible</p>
+<p>No polls availaible</p>
 {% endif %}
 
 {% endblock  %}
+<a href="{% url 'poll:vote' question.id %}">{{ question.question_text }}</a>
