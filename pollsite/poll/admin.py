@@ -5,7 +5,7 @@ from django.db import models
 
 from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
 
-from .models import Question, Choice, Meeting
+from .models import Question, Choice, Meeting, Attendee
 
 # administration of choices once in Question admin panel
 class ChoiceInline(admin.TabularInline):
@@ -51,7 +51,20 @@ class MeetingAdmin(NonSortableParentAdmin):
     list_display = ('title', 'activities','participants','has_started')
     search_fields = ['title','description']
 
+# Attendee score table
+class AttendeeAdmin(admin.ModelAdmin):
+    list_display = ('name', 'score','get_meeting') 
+    fields = ['name','score']
+    readonly_fields =['name', 'score','meeting']
+    list_filter=('meeting',)
 
+    class Meta:
+        verbose_name = 'Score Table'
+
+    def get_meeting(self,obj):
+        link=reverse("admin:poll_meeting_change", args=[obj.meeting.id])
+        return format_html('<a href="%s">%s</a>' % (link,obj.meeting.title))
 
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Meeting, MeetingAdmin)
+admin.site.register(Attendee, AttendeeAdmin)

@@ -50,6 +50,9 @@ class Question(SortableMixin):
 	meeting = SortableForeignKey(Meeting, on_delete=models.CASCADE)
 	question_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
+	# for quizzes
+	first_correct_answer = models.BooleanField('True if no one gave the correct answer already',default=True)
+
 	class Meta:
 		ordering = ['question_order'] 
 

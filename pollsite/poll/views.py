@@ -1,9 +1,16 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+from django.db.models import Q
 
 from .models import Choice, Question, Meeting,Attendee,Vote
 from .forms import WordForm,LoginForm
+
+def get_previous_user_answers(attendee,question):
+	query = Q(user=attendee)
+	query.add(Q(choice__question__title__contains=question.title),Q.AND)
+	return Vote.objects.filter(query)
+
 
 # Index view with all current meetings
 def index(request):
@@ -25,7 +32,7 @@ def meeting(request, meeting_id):
 			'current_question': meeting.question_set.filter(is_done=False).order_by('question_order')[0],
 			'previous_question_list': meeting.question_set.filter(is_done=True).order_by('question_order') 
 		}
-		return render(request, 'poll/meeting', context) 
+		return render(request, 'poll/meeting', context)
 
 def login(request,meeting_id):
 	meeting = get_object_or_404(Meeting, pk=meeting_id)
@@ -84,7 +91,12 @@ def add(request, question_id):
 # return view for Polls and Quizz
 def results(request, question_id):
 	question = get_object_or_404(Question, pk=question_id)
-	return render(request, 'poll/results', {'question': question})
+	attendee = Attendee.objects.get(pk=request.session['attendee_id'])
+	context = {
+	'question': question,
+	'vote':get_previous_user_answers(attendee,question)[0]
+	}
+	return render(request, 'poll/results', context)
 
 
 # form view for Text, Polls and Quizz
@@ -100,7 +112,21 @@ def vote(request, question_id):
 		})
 	else:
 		attendee = Attendee.objects.get(pk=request.session['attendee_id'])
-		vote=Vote(user=attendee,choice=selected_choice) # the vote is a model to keep traces of the votes
-		vote.save()
+		if(len(get_previous_user_answers(attendee,question))==0):
+			vote=Vote(user=attendee,choice=selected_choice) # the vote is a model to keep traces of the votes
+			vote.save()
+			if(selected_choice.isTrue):
+				if(question.first_correct_answer):
+					question.first_correct_answer = False
+					question.save()
+					attendee.score +=1
+				attendee.score +=1
+				attendee.save()
+		else:
+			context = {
+			'question': question,
+			'vote':get_previous_user_answers(attendee,question)[0]
+			}
+			return render(request, 'poll/results', context)
 		# selected_choice.save() # update the vote count byt not sure if needed
 		return HttpResponseRedirect(reverse('poll:results', args=(question.id,)))
