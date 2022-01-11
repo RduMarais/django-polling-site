@@ -8,7 +8,7 @@
 
 {% block content  %}
 <h1>{{ question.title }}</h1>
-
+{% if question.is_done == False %}
 <div id="wordcloud_input">
     <form action="{% url 'poll:add' question.id %}" method="post"> 
         {% csrf_token %}
@@ -16,6 +16,7 @@
         <input type="submit" value="Add">
     </form>
 </div>
+{% endif %}
 <div id="wordcloud_container">
     <script>
         anychart.onDocumentReady(function() {
@@ -31,10 +32,12 @@
             chart.title('{{ question.title }}')
             // set an array of angles at which the words will be laid out
             chart.angles([0])
-            // enable a color range
+            
+            // enable a color range if you want
             // chart.colorRange(true);
             // set the color range length
             // chart.colorRange().length('80%');
+
             // display the word cloud chart
             chart.container("wordcloud_container");
             chart.draw();

@@ -9,11 +9,12 @@ from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
 
 from .models import Question, Choice, Meeting
 
+# administration of choices once in Question admin panel
 class ChoiceInline(admin.TabularInline):
     model = Choice
     extra = 1
 
-
+# Question admin panel
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['question_type','is_done']}),
@@ -31,21 +32,17 @@ class QuestionAdmin(admin.ModelAdmin):
         link=reverse("admin:poll_meeting_change", args=[obj.meeting.id])
         return format_html('<a href="%s">%s</a>' % (link,obj.meeting.title))
 
-
+# Question choices once in the meeting admin panel
+#   this view extends the SortableStackedLine type to have the questions sortable
 class QuestionsOrder(SortableStackedInline):
     model = Question
     extra = 0
-    # fields = (('is_done','question_type'))
-    fields = ['question_type']
+    fields = (('is_done','question_type'))
     readonly_fields = ['question_type']
     show_change_link = True
 
-    # formfield_overrides = {
-    #     models.BooleanField: {'widget': CheckboxInput(attrs={'rows':4, 'cols':4})},
-    #     models.CharField: {'widget': Select(attrs={'rows':4, 'cols':4})},
-    # }
-    
 
+# Meeting admin panel
 class MeetingAdmin(NonSortableParentAdmin):
     fieldsets = [
         (None, {'fields': ['title','desc','has_started']}),
@@ -54,6 +51,8 @@ class MeetingAdmin(NonSortableParentAdmin):
     list_display = ('title', 'activities','has_started')
     list_filter = ['has_started']
     # search_fields = ['title']
+
+
 
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Meeting, MeetingAdmin)

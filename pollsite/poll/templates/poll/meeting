@@ -22,7 +22,7 @@
 {% if current_question %}
 <section class="text-gray-700 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
-        <div class="-my-8">
+        <div class="-my-8">Current Question : 
         <a href="{% url 'poll:vote' current_question.id %}">{{ current_question.title }}</a>
     </div>
     </div>
@@ -33,6 +33,7 @@
 <section class="text-gray-700 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
         <div class="-my-8">
+            <h3>Previous questions : 
             {% for question in previous_question_list %}
             <div class="py-8 flex flex-wrap md:flex-no-wrap">
                 <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
@@ -49,9 +50,9 @@
                     {% if question.question_type == 'WC' %}
                     <a href="{% url 'poll:add' question.id %}" class="text-green-500 inline-flex items-center mt-4">
                     {% else %}
-                    <a href="{% url 'poll:vote' question.id %}" class="text-green-500 inline-flex items-center mt-4">
+                    <a href="{% url 'poll:results' question.id %}" class="text-green-500 inline-flex items-center mt-4">
                     {% endif %}
-                        Vote Now
+                        See results
                         <svg class="w-4 h-4 ml-2" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" fill="none"
                             stroke-linecap="round" stroke-linejoin="round">
                             <path d="M5 12h14"></path>

@@ -10,6 +10,7 @@
 <h1>{{ question.title }}</h1>
 
 {% if question.question_type == 'WC' %}
+{% if question.is_done == False %}
 <div id="wordcloud_input">
     <form action="{% url 'poll:vote' question.id %}" method="post"> 
         {% csrf_token %}
@@ -17,6 +18,7 @@
         <input type="submit" value="Add">
     </form>
 </div>
+{% endif %}
 <div id="wordcloud_container">
     <script>
         anychart.onDocumentReady(function() {

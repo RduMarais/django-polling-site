@@ -14,14 +14,14 @@
         <div class="-my-8">
             {% for meeting in meetings %}
             <div class="py-8 flex flex-wrap md:flex-no-wrap">
-                <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
+                <div class="md:w-64 md:mb-0 mb-6 fle x-shrink-0 flex flex-col">
                     <span class="tracking-widest font-medium title-font text-gray-900">{{meeting.pub_date.date}}</span>
                     <span class="mt-1 text-gray-500 text-sm">{{ meeting.activities.count }} Activities Received </span>
                 </div>
                 <div class="md:flex-grow">
 
                     <h2 class="text-2xl font-medium text-gray-900 title-font mb-2">{{meeting.title }}</h2>
-                    <p class="leading-relaxed">{{meeting.desc}}
+                    <p class="leading-relaxed">{{meeting.desc_rendered | safe}}
                     </p>
                     {% comment %} FINDME {% endcomment %}
                     <a href="{% url 'poll:meeting' meeting.id %}" class="text-green-500 inline-flex items-center mt-4">Join Meeting
