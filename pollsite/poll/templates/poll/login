@@ -17,4 +17,12 @@
     </form>
 </div>
 
+{% if error %}
+<div id="error_message">
+    <strong> 
+        {{ error }}
+    </strong>
+</div>
+{% endif %}
+
 {% endblock  %}

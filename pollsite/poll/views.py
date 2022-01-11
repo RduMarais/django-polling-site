@@ -34,12 +34,17 @@ def login(request,meeting_id):
 		if(request.method=='POST'):
 			form = LoginForm(request.POST)
 			if(form.is_valid()):
-				new_attendee = Attendee(name=form.cleaned_data['username'],meeting=meeting,score=0)
-				new_attendee.save()
-				request.session['attendee_id'] = new_attendee.id
-				return HttpResponseRedirect(reverse('poll:meeting', args=(meeting.id,)))
+				if(form.cleaned_data['meeting_code'] == meeting.code):
+					new_attendee = Attendee(name=form.cleaned_data['username'],meeting=meeting,score=0)
+					new_attendee.save()
+					request.session['attendee_id'] = new_attendee.id
+					return HttpResponseRedirect(reverse('poll:meeting', args=(meeting.id,)))
+				else:
+					context = {'meeting':meeting,'error':"The meeting code is not valid",'form':LoginForm()}
+					return render(request,'poll/login',context)
 			else:
-				return render(request,'poll/login',{'meeting':meeting})
+				context = {'meeting':meeting,'error':"Something went wrong",'form':LoginForm()}
+				return render(request,'poll/login',context)
 		else:
 			return render(request,'poll/login',{'meeting':meeting})
 	else:
@@ -47,7 +52,7 @@ def login(request,meeting_id):
 
 
 
-# return view for word clouds -> returns to add template
+# return view for word clouds -> returns to "add" template
 def added(request, question_id):
 	question = get_object_or_404(Question, pk=question_id)
 	form = WordForm()
