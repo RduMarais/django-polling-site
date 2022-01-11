@@ -1,10 +1,10 @@
 topTitle_ln1 : LibreKast Meeting
 
-topTitle_ln2: Animate your meetings
+topTitle_ln2: Gamify your meetings
 
-topDes : Made in India by Aahnik Daw. as on 2020 reads in 12th grade. Not serious application. Just illustrates functionality. All data or statistics shown are fake. All questions or polls are dummy. Follow me on GitHub , See Links at footer.
+topDes : Create animations for your meetings such as Quizzes, Polls and Word Clouds. This application is a dummy app showcasing the functionalities. Please bear in mind that this code is made free to help but this app was not designed by actual devs.
 
-topImg : https://github.com/aahnik/nidarzanaJAlodvahana/blob/master/Development%20Made%20Easy.png?raw=true
+topImg : https://pour-info.tech/static/images/logo_ordi2.png
 
 btn1Text : Vote Now
 
@@ -12,16 +12,14 @@ btn1Url : /poll
 
 btn2Text : Know More
 
-btn2Url : https://github.com/aahnik 
+btn2Url : https://github.com/RduMarais/LibreKast
 
-midTitle : Your Vote Matters
+midTitle : How to deploy
     
-midDesc : It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distr DUMMY DATA NOT REAL FILLER DATA SPAM DATA d to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum a ALL DUMMY DATA  and a search
+midDesc : A comprehensive guide to deployment is available on GitHub README. In order to setup LibreKast in an deployment envionment, one needs to setup a web server (such as Apache or Nginx), setup the server for delivering a django app and clone the repository to start the app. Then for deployment a comprehensive checklist is available on GitHub to explain how to seed the application secrets; remove debugging functionalities; create an admin user etc.  
 
+teamTitle: State of the development 
 
-
-teamTitle: Our Moderators and Contributers 
-
-teamDesc: Everybody who contributes to the GitHub repo of this site is allowed to upload show their pic here ... 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like) DUMMY DATA , FILLER DATA SPAM DATA 
+teamDesc: The current app was designed by Romain du Marais for personal use and shared publicly on GitHub ; and Aahnik Daw for a school project. Please contribute to its development if you consider it useful.
 
     

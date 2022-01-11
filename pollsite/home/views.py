@@ -10,14 +10,8 @@ def index(request):
     # NOTE PUT ABSOLUTE PATH OF homePage.yaml here
     with open('/Users/romain/Stratus/info/server/tests_beekast/django-polling-site/pollsite/home/homePage.yaml', 'r') as file:
         homePageElements = yaml.full_load(file)
-    stats = {
-        'forks': 10,
-        'choices': '100%',
-        'participants': 200,
-        'questions': '24/7'
-    }
     team = TeamMember.objects.order_by('title')
-    context = {'hpe': homePageElements, 'team': team, 'stats': stats}
+    context = {'hpe': homePageElements, 'team': team}
     return render(request, 'home/index', context)
 
 # We absolutely do not need this
