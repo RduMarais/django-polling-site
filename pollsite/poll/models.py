@@ -6,7 +6,7 @@ from adminsortable.models import SortableMixin
 from adminsortable.fields import SortableForeignKey
 
 from markdownfield.models import MarkdownField, RenderedMarkdownField
-from markdownfield.validators import VALIDATOR_CLASSY, VALIDATOR_STANDARD
+from markdownfield.validators import VALIDATOR_CLASSY
 
 QUESTION_TYPES = (
 		('PL', 'Poll'),           # For questions to get the attendees' POV
@@ -41,7 +41,7 @@ class Attendee(models.Model):
 # model for all questions, whether they are Word Cloud, Polls, Quizzes or ony text
 class Question(SortableMixin):
 	title = models.CharField('Question', max_length=50)
-	desc = MarkdownField('Description', max_length=200,rendered_field='desc_rendered', validator=VALIDATOR_STANDARD)
+	desc = MarkdownField('Description', max_length=200,rendered_field='desc_rendered', validator=VALIDATOR_CLASSY)
 	# this attribute is generated automatically as markdown render of previous field
 	desc_rendered = RenderedMarkdownField()
 	pub_date = models.DateTimeField('Date Published',default=timezone.now)
@@ -64,7 +64,7 @@ class Question(SortableMixin):
 		participants = 0
 		choices = self.choice_set.all()
 		for choice in choices:
-			participants += choice.votes
+			participants += choice.votes()
 		return participants
 
 	# by default, a qustion with no correct choice is a poll, 
@@ -89,9 +89,17 @@ class Question(SortableMixin):
 class Choice(models.Model):
 	question = models.ForeignKey(Question, on_delete=models.CASCADE)
 	choice_text = models.CharField(max_length=100)
-	votes = models.IntegerField(default=0)
+	# votes = models.IntegerField(default=0)
 	isTrue = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.choice_text
 
+	def votes(self):
+		return len(self.vote_set.all())
+
+
+# model to define many-to-many relationship between choices and Attendees
+class Vote(models.Model):
+	choice = models.ForeignKey(Choice,on_delete=models.CASCADE)
+	user = models.ForeignKey(Attendee,on_delete=models.CASCADE)

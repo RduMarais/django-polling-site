@@ -1,8 +1,6 @@
 from django.contrib import admin
-from django_toggle_switch_widget.widgets import DjangoToggleSwitchWidget
 from django.utils.html import format_html
 from django.urls import reverse
-from django.forms import Select, CheckboxInput
 from django.db import models
 
 from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
@@ -13,6 +11,7 @@ from .models import Question, Choice, Meeting
 class ChoiceInline(admin.TabularInline):
     model = Choice
     extra = 1
+    readonly_fields = ['votes']
 
 # Question admin panel
 class QuestionAdmin(admin.ModelAdmin):

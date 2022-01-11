@@ -1,9 +1,8 @@
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.utils import timezone
 
-from .models import Choice, Question, Meeting,Attendee
+from .models import Choice, Question, Meeting,Attendee,Vote
 from .forms import WordForm,LoginForm
 
 # Index view with all current meetings
@@ -63,14 +62,20 @@ def add(request, question_id):
 	question = get_object_or_404(Question, pk=question_id)
 	if request.method == 'POST':
 		form = WordForm(request.POST)
+		attendee = Attendee.objects.get(pk=request.session['attendee_id'])
 		if(form.is_valid()):
 			try:
 				existing_choice = question.choice_set.get(choice_text=form.cleaned_data['choice'])
-				existing_choice.votes +=1
-				existing_choice.save()
+				# existing_choice.votes +=1
+				vote=Vote(user=attendee,choice=existing_choice) # the vote is a model to keep traces of the votes
+				vote.save()
+				# existing_choice.save() # update the vote count byt not sure if needed
 			except (KeyError, Choice.DoesNotExist):
-				added_choice = Choice(question=question, choice_text=form.cleaned_data['choice'], votes=1)
+				added_choice = Choice(question=question, choice_text=form.cleaned_data['choice'])
 				added_choice.save()
+				vote=Vote(user=attendee,choice=added_choice)
+				vote.save()
+				# added_choice.save() # re-save to update the vote count byt not sure if needed
 			return HttpResponseRedirect(reverse('poll:added', args=(question_id,)))
 	else:
 		form = WordForm()
@@ -94,9 +99,8 @@ def vote(request, question_id):
 			'error_message': "You didn't select a choice.",
 		})
 	else:
-		selected_choice.votes += 1
-		selected_choice.save()
-		# Always return an HttpResponseRedirect after successfully dealing
-		# with POST data. This prevents data from being posted twice if a
-		# user hits the Back button.
+		attendee = Attendee.objects.get(pk=request.session['attendee_id'])
+		vote=Vote(user=attendee,choice=selected_choice) # the vote is a model to keep traces of the votes
+		vote.save()
+		# selected_choice.save() # update the vote count byt not sure if needed
 		return HttpResponseRedirect(reverse('poll:results', args=(question.id,)))
