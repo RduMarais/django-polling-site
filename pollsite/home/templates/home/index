@@ -1,10 +1,6 @@
 {% extends "base_layout.html" %}
 
-{% block title  %}
-
-<title>HOME</title>
-
-{% endblock  %}
+{% block title  %}Home{% endblock  %}
 
 {% block content  %}
 <section class="text-gray-500 bg-gray-900 body-font">

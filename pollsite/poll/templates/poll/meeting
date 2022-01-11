@@ -1,10 +1,6 @@
 {% extends "base_layout.html" %}
 
-{% block title  %}
-
-<title>Canvass All Polls</title>
-
-{% endblock  %}
+{% block title  %}Meeting{% endblock  %}
 
 {% block content  %}
 

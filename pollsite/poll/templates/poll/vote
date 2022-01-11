@@ -1,10 +1,7 @@
 {% extends "base_layout.html" %}
 
-{% block title  %}
+{% block title  %}Vote{% endblock  %}
 
-<title>Canvas Vote in a Poll</title>
-
-{% endblock  %}
 {% block content  %}
 <h1>{{ question.title }}</h1>
 

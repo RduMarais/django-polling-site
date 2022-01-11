@@ -20,8 +20,8 @@ def index(request):
     context = {'hpe': homePageElements, 'team': team, 'stats': stats}
     return render(request, 'home/index', context)
 
-
+# We absolutely do not need this
 def opnsrc(request):
     now = timezone.now()
     context = {'now': now}
-    return render(request, 'home/opensource', context)
+    return render(request, 'home/license', context)

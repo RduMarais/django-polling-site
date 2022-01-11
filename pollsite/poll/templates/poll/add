@@ -1,10 +1,6 @@
 {% extends "base_layout.html" %}
 
-{% block title  %}
-
-<title>Canvas Word Cloud</title>
-
-{% endblock  %}
+{% block title  %}Word Cloud{% endblock  %}
 
 {% block content  %}
 <h1>{{ question.title }}</h1>
