@@ -23,10 +23,8 @@ class QuestionAdmin(admin.ModelAdmin):
     ]
     inlines = [ChoiceInline]
     list_display = ('title', 'question_type','is_done', 'get_meeting', 'participants') 
-    # also 'recent' and 'pub_date' are available
     list_editable = ('is_done',)
-    list_filter = ['pub_date']
-    search_fields = ['title']
+    search_fields = ['title','description']
 
     def get_meeting(self,obj):
         link=reverse("admin:poll_meeting_change", args=[obj.meeting.id])
@@ -45,12 +43,14 @@ class QuestionsOrder(SortableStackedInline):
 # Meeting admin panel
 class MeetingAdmin(NonSortableParentAdmin):
     fieldsets = [
-        (None, {'fields': ['title','desc','has_started']}),
+        (None, {'fields': ['has_started','participants']}),
+        ('Meeting informations', {'fields': ['title','desc']}),
+        ('Parameters',{'fields':['code','reward_fastest']})
     ]
+    readonly_fields =['participants']
     inlines = [QuestionsOrder]
-    list_display = ('title', 'activities','has_started')
-    list_filter = ['has_started']
-    # search_fields = ['title']
+    list_display = ('title', 'activities','participants','has_started')
+    search_fields = ['title','description']
 
 
 

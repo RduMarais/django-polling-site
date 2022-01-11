@@ -22,9 +22,13 @@ class Meeting(models.Model):
 	desc_rendered = RenderedMarkdownField()
 	code = models.CharField('Security Code for joining the Meeting', default='P1F02021', max_length=50)
 	has_started = models.BooleanField('Meeting has started',default=False)
+	reward_fastest = models.BooleanField('Reward the fastest answers',default=False)
 
 	def activities(self):
 		return len(self.question_set.all())
+
+	def participants(self):
+		return len(self.attendee_set.all())
 
 # model to hold the attendee's name 
 #   (which allows to create a top and them to give themselves cool names)
@@ -47,8 +51,6 @@ class Question(SortableMixin):
 	question_order = models.PositiveIntegerField(default=0, editable=False, db_index=True)
 
 	class Meta:
-		# https://docs.djangoproject.com/en/4.0/ref/models/options/#order-with-respect-to
-		# order_with_respect_to = 'meeting'
 		ordering = ['question_order'] 
 
 	def __str__(self):
