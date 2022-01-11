@@ -5,6 +5,9 @@ from django.utils import timezone
 from adminsortable.models import SortableMixin
 from adminsortable.fields import SortableForeignKey
 
+from markdownfield.models import MarkdownField, RenderedMarkdownField
+from markdownfield.validators import VALIDATOR_CLASSY, VALIDATOR_STANDARD
+
 QUESTION_TYPES = (
         ('PL', 'Poll'),
         ('TX', 'Text Only'),
@@ -14,7 +17,8 @@ QUESTION_TYPES = (
 
 class Meeting(models.Model):
     title = models.CharField('Title of Meeting', max_length=50)
-    desc = models.TextField('Description', max_length=200)
+    desc = MarkdownField('Description', max_length=200,rendered_field='desc_rendered', validator=VALIDATOR_CLASSY)
+    desc_rendered = RenderedMarkdownField()
     code = models.CharField('Security Code for joining the Meeting', default='P1F02021', max_length=50)
     has_started = models.BooleanField('Meeting has started',default=False)
 
@@ -27,7 +31,8 @@ class Attendee(models.Model):
 
 class Question(SortableMixin):
     title = models.CharField('Question', max_length=50)
-    desc = models.TextField('Description', max_length=200)
+    desc = MarkdownField('Description', max_length=200,rendered_field='desc_rendered', validator=VALIDATOR_STANDARD)
+    desc_rendered = RenderedMarkdownField()
     pub_date = models.DateTimeField('Date Published',default=timezone.now)
     is_done = models.BooleanField('Question already completed',default=False)
     question_type = models.CharField('Type of Question', max_length=2,choices=QUESTION_TYPES, default='PL')

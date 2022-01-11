@@ -8,6 +8,17 @@
 
 {% block content  %}
 
+<section class="text-gray-700 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="-my-8">
+            <h2>{{ meeting.title }}</h2>
+            <div class="py-8 flex flex-wrap md:flex-no-wrap">
+                <p>{{ meeting.desc_rendered | safe }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
 {% if current_question %}
 <section class="text-gray-700 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">

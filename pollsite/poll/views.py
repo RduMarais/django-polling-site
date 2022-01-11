@@ -15,6 +15,7 @@ def index(request):
 def meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
     context = {
+        'meeting':meeting,
         'current_question': meeting.question_set.filter(is_done=False).order_by('question_order')[0],
         'previous_question_list': meeting.question_set.filter(is_done=True).order_by('question_order') 
     }

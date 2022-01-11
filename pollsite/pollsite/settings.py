@@ -25,7 +25,7 @@ SECRET_KEY = '3zaz_n48y63wv5xl(s9=zfrkixc-p10p1g^thb=eqs*=c3t0gp'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.7', '127.0.0.1']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # migration to django > 3.2
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'markdownfield',
     'adminsortable',
 ]
 
@@ -131,3 +132,8 @@ STATICFILES_DIRS = [
     BASE_DIR + "/static",
     # '/var/www/static/',
 ]
+
+
+# For Markdown formatting
+# TODO before deployment
+SITE_URL = "http://localhost"
