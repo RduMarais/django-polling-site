@@ -7,6 +7,7 @@ from adminsortable.fields import SortableForeignKey
 
 QUESTION_TYPES = (
         ('PL', 'Poll'),
+        ('TX', 'Text Only'),
         ('QZ', 'Quizz'),
         ('WC', 'Word Cloud'),
     )
@@ -27,7 +28,7 @@ class Attendee(models.Model):
 class Question(SortableMixin):
     title = models.CharField('Question', max_length=50)
     desc = models.TextField('Description', max_length=200)
-    pub_date = models.DateTimeField('Date Published')
+    pub_date = models.DateTimeField('Date Published',default=timezone.now)
     is_done = models.BooleanField('Question already completed',default=False)
     question_type = models.CharField('Type of Question', max_length=2,choices=QUESTION_TYPES, default='PL')
     meeting = SortableForeignKey(Meeting, on_delete=models.CASCADE)

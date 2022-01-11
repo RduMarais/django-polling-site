@@ -8,11 +8,21 @@
 
 {% block content  %}
 
-{% if question_list %}
+{% if current_question %}
 <section class="text-gray-700 body-font overflow-hidden">
     <div class="container px-5 py-24 mx-auto">
         <div class="-my-8">
-            {% for question in question_list %}
+        <a href="{% url 'poll:vote' current_question.id %}">{{ current_question.title }}</a>
+    </div>
+    </div>
+</section>
+{% endif %}
+
+{% if previous_question_list %}
+<section class="text-gray-700 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+        <div class="-my-8">
+            {% for question in previous_question_list %}
             <div class="py-8 flex flex-wrap md:flex-no-wrap">
                 <div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
                     <span class="tracking-widest font-medium title-font text-gray-900">{{question.pub_date.date}}</span>
@@ -44,9 +54,7 @@
         </div>
     </div>
 </section>
-{% else %}
-<p>No polls availaible</p>
 {% endif %}
 
+
 {% endblock  %}
-<a href="{% url 'poll:vote' question.id %}">{{ question.question_text }}</a>

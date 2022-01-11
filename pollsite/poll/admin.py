@@ -2,6 +2,8 @@ from django.contrib import admin
 from django_toggle_switch_widget.widgets import DjangoToggleSwitchWidget
 from django.utils.html import format_html
 from django.urls import reverse
+from django.forms import Select, CheckboxInput
+from django.db import models
 
 from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
 
@@ -33,8 +35,16 @@ class QuestionAdmin(admin.ModelAdmin):
 class QuestionsOrder(SortableStackedInline):
     model = Question
     extra = 0
-    fields = ['title','is_done']
+    # fields = (('is_done','question_type'))
+    fields = ['question_type']
     readonly_fields = ['question_type']
+    show_change_link = True
+
+    # formfield_overrides = {
+    #     models.BooleanField: {'widget': CheckboxInput(attrs={'rows':4, 'cols':4})},
+    #     models.CharField: {'widget': Select(attrs={'rows':4, 'cols':4})},
+    # }
+    
 
 class MeetingAdmin(NonSortableParentAdmin):
     fieldsets = [

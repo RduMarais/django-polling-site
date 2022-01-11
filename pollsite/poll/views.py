@@ -14,7 +14,12 @@ def index(request):
 
 def meeting(request, meeting_id):
     meeting = get_object_or_404(Meeting, pk=meeting_id)
-    return render(request, 'poll/meeting', {'question_list': meeting.question_set.all().order_by('question_order') })
+    context = {
+        'current_question': meeting.question_set.filter(is_done=False).order_by('question_order')[0],
+        'previous_question_list': meeting.question_set.filter(is_done=True).order_by('question_order') 
+    }
+    print(context['current_question'])
+    return render(request, 'poll/meeting', context)
 
 def added(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
@@ -31,7 +36,6 @@ def add(request, question_id):
                 existing_choice.votes +=1
                 existing_choice.save()
             except (KeyError, Choice.DoesNotExist):
-                print("DOES NOT EXIST")
                 added_choice = Choice(question=question, choice_text=form.cleaned_data['choice'], votes=1)
                 added_choice.save()
             return HttpResponseRedirect(reverse('poll:added', args=(question_id,)))
