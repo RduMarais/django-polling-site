@@ -28,9 +28,11 @@ class Meeting(models.Model):
 
 # model to hold the attendee's name 
 #   (which allows to create a top and them to give themselves cool names)
+# 	the model name is attendee in order not to confuse with django users 
 class Attendee(models.Model):
 	name = models.CharField('Your Name', max_length=50, default='Anonymous')
-	# meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
+	score = models.IntegerField('Score',default=0)
+	meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE)
 	
 # model for all questions, whether they are Word Cloud, Polls, Quizzes or ony text
 class Question(SortableMixin):

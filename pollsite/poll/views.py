@@ -3,8 +3,8 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.utils import timezone
 
-from .models import Choice, Question, Meeting
-from .forms import WordForm
+from .models import Choice, Question, Meeting,Attendee
+from .forms import WordForm,LoginForm
 
 # Index view with all current meetings
 def index(request):
@@ -15,16 +15,37 @@ def index(request):
 # Once you enter a meeting, this is the page displaying the currnt question and previous results
 def meeting(request, meeting_id):
 	meeting = get_object_or_404(Meeting, pk=meeting_id)
-	if(session.contains('username')):
-		return render(request,'poll/login',{'meeting':meeting})
+	if(not 'attendee_id' in request.session): # if attendee is not logged in yet
+		form = LoginForm()
+		return render(request,'poll/login',{'meeting':meeting,'form':form})
 	else:
+		attendee = Attendee.objects.get(pk=request.session['attendee_id'])
 		context = {
 			'meeting':meeting,
+			'attendee':attendee,
 			'current_question': meeting.question_set.filter(is_done=False).order_by('question_order')[0],
 			'previous_question_list': meeting.question_set.filter(is_done=True).order_by('question_order') 
 		}
-		print(context['current_question'])
 		return render(request, 'poll/meeting', context) 
+
+def login(request,meeting_id):
+	meeting = get_object_or_404(Meeting, pk=meeting_id)
+	if(not 'attendee_id' in request.session): # if attendee is not logged in yet
+		if(request.method=='POST'):
+			form = LoginForm(request.POST)
+			if(form.is_valid()):
+				new_attendee = Attendee(name=form.cleaned_data['username'],meeting=meeting,score=0)
+				new_attendee.save()
+				request.session['attendee_id'] = new_attendee.id
+				return HttpResponseRedirect(reverse('poll:meeting', args=(meeting.id,)))
+			else:
+				return render(request,'poll/login',{'meeting':meeting})
+		else:
+			return render(request,'poll/login',{'meeting':meeting})
+	else:
+		return HttpResponseRedirect(reverse('poll:meeting', args=(meeting.id,)))
+
+
 
 # return view for word clouds -> returns to add template
 def added(request, question_id):

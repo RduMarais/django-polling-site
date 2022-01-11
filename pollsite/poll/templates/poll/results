@@ -11,7 +11,7 @@
 
 {% if question.question_type == 'WC' %}
 {% if question.is_done == False %}
-<div id="wordcloud_input">
+<div id="wordcloud_input">PROUT
     <form action="{% url 'poll:vote' question.id %}" method="post"> 
         {% csrf_token %}
         <input type="text" id="choice" name="choice" placeholder="your word">

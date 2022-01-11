@@ -10,7 +10,7 @@
 <h1>{{ meeting.title }}</h1>
 
 <div id="login_form">
-    <form action="{% url 'poll:login' meeeting.id %}" method="post"> 
+    <form action="{% url 'poll:login' meeting.id %}" method="post"> 
         {% csrf_token %}
         {{ form }}
         <input type="submit" value="Add">
