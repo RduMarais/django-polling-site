@@ -87,7 +87,7 @@
             <br>
             <p class="lg:w-2/3 mx-auto leading-relaxed text-base">{{hpe.teamDesc}}</p>
         </div>
-        <div class="flex flex-wrap -m-4">
+        <div class="flex flex-wrap -m-4 text-center">
             {% for member in team %}
             <div class="p-4 lg:w-1/4 md:w-1/2">
                 <div class="h-full flex flex-col items-center text-center">

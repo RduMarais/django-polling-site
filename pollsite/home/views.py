@@ -10,8 +10,6 @@ import os
 # In an app deployment, on the poll app is installed to your preexisting main view
 
 def index(request):
-    # NOTE PUT PATH OF homePage.yaml here
-    # WHYYYYYYY
     with open(os.path.join(settings.BASE_DIR, 'home/homePage.yaml'), 'r') as file:
         homePageElements = yaml.full_load(file)
     team = TeamMember.objects.order_by('title')

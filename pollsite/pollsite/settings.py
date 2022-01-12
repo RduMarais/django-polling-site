@@ -24,8 +24,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '3zaz_n48y63wv5xl(s9=zfrkixc-p10p1g^thb=eqs*=c3t0gp'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# TODO when deploying
 DEBUG = True
 
+# TODO when deploying add your hostname
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # migration to django > 3.2
