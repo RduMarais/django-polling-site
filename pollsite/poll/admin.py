@@ -42,7 +42,7 @@ class QuestionsOrder(SortableStackedInline):
 # Meeting admin panel
 class MeetingAdmin(NonSortableParentAdmin):
     fieldsets = [
-        (None, {'fields': ['has_started','participants']}),
+        (None, {'fields': ['has_started','participants','date_start','date_end']}),
         ('Meeting informations', {'fields': ['title','desc']}),
         ('Parameters',{'fields':['code','reward_fastest']})
     ]

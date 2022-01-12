@@ -13,3 +13,4 @@ django-admin-sortable
 django-markdownfield==0.10.0
 markdown-3.3.6
 bleach-4.1.0
+Pillow-9.0.0

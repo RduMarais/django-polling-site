@@ -11,8 +11,8 @@
             {% for meeting in meetings %}
             <div class="py-8 flex flex-wrap md:flex-no-wrap">
                 <div class="md:w-64 md:mb-0 mb-6 fle x-shrink-0 flex flex-col">
-                    <span class="tracking-widest font-medium title-font text-gray-900">{{meeting.pub_date.date}}</span>
-                    <span class="mt-1 text-gray-500 text-sm">{{ meeting.activities.count }} Activities Received </span>
+                    <span class="tracking-widest font-medium title-font text-gray-900">{{meeting.date }}</span>
+                    <span class="mt-1 text-gray-500 text-sm">{{ meeting.activities_done }}/{{ meeting.activities }} Activities completed</span>
                 </div>
                 <div class="md:flex-grow">
 

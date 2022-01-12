@@ -2,6 +2,9 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.db.models import Q
+from django.utils import timezone
+
+import datetime
 
 from .models import Choice, Question, Meeting,Attendee,Vote
 from .forms import WordForm,LoginForm
@@ -14,11 +17,12 @@ def get_previous_user_answers(attendee,question):
 
 # Index view with all current meetings
 def index(request):
-	meetings_list = Meeting.objects.filter(has_started=True)
+	# Gets all meetings happening now (defined with Start time and End Time)
+	meetings_list = Meeting.objects.filter(Q(date_start__time__lte=timezone.now()) & Q(date_end__time__gte=timezone.now()))
 	context = {'meetings':meetings_list }
 	return render(request, 'poll/index', context)
 
-# Once you enter a meeting, this is the page displaying the currnt question and previous results
+# Once you enter a meeting, this is the page displaying the current question and previous results
 def meeting(request, meeting_id):
 	meeting = get_object_or_404(Meeting, pk=meeting_id)
 	if(not 'attendee_id' in request.session): # if attendee is not logged in yet

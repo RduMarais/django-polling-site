@@ -18,14 +18,20 @@ QUESTION_TYPES = (
 # represents an occurence of a presentation. 
 class Meeting(models.Model):
 	title = models.CharField('Title of Meeting', max_length=50)
-	desc = MarkdownField('Description', max_length=200,rendered_field='desc_rendered', validator=VALIDATOR_CLASSY)
+	desc = MarkdownField('Description', max_length=200,rendered_field='desc_rendered', validator=VALIDATOR_CLASSY,blank=True)
 	desc_rendered = RenderedMarkdownField()
 	code = models.CharField('Security Code for joining the Meeting', default='P1F02021', max_length=50)
 	has_started = models.BooleanField('Meeting has started',default=False)
 	reward_fastest = models.BooleanField('Reward the fastest answers',default=False)
+	date_start = models.DateTimeField('Start time of the meeting',default=timezone.now)
+	date_end = models.DateTimeField('End time of the meeting',default=timezone.now()+datetime.timedelta(hours=2))
+	image = models.ImageField('Image for your meeting',null = True)
 
 	def activities(self):
 		return len(self.question_set.all())
+
+	def activities_done(self):
+		return len(self.question_set.filter(is_done=True))
 
 	def participants(self):
 		return len(self.attendee_set.all())
