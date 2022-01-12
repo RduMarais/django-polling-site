@@ -2,3 +2,4 @@
 *.pyc
 __pycache__
 pollsite/media/*
+pollsite/db.sqlite3
