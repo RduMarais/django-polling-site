@@ -3,14 +3,15 @@
 {% block title  %}Meeting{% endblock  %}
 
 {% block content  %}
-
+<section class="text-center">
+	<h1 class="text-3xl text-center">{{ meeting.title }}</h1>
+	<div class="text-center py-4">
+		<p>{{ meeting.desc_rendered | safe }}</p>
+	</div>
+</section>
 <section class="text-gray-700 body-font overflow-hidden">
 	<div class="container px-5 py-24 mx-auto">
 		<div class="-my-8">
-			<h2>{{ meeting.title }}</h2>
-			<div class="py-8 flex flex-wrap md:flex-no-wrap">
-				<p>{{ meeting.desc_rendered | safe }}</p>
-			</div>
 			<div class="py-8 flex flex-wrap md:flex-no-wrap">
 				<p>{{ attendee.name }} : {{ attendee.score }} points</p>
 			</div>
@@ -32,11 +33,10 @@
 <section class="text-gray-700 body-font overflow-hidden">
 	<div class="container px-5 py-24 mx-auto">
 		<div class="-my-8">
-			<h3>Previous questions : 
+			<h3 class="text-2xl text-center">Previous questions : </h3>
 			{% for question in previous_question_list %}
 			<div class="py-8 flex flex-wrap md:flex-no-wrap">
 				<div class="md:w-64 md:mb-0 mb-6 flex-shrink-0 flex flex-col">
-					<span class="tracking-widest font-medium title-font text-gray-900">{{question.pub_date.date}}</span>
 					<span class="mt-1 text-gray-500 text-sm">{{question.participants}} Votes Received </span>
 				</div>
 				<div class="md:flex-grow">

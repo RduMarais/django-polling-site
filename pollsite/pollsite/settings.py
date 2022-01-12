@@ -135,7 +135,8 @@ STATICFILES_DIRS = [
     BASE_DIR + "/static",
     # '/var/www/static/',
 ]
-
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media/'
 
 # For Markdown formatting
 # TODO before deployment

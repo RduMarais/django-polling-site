@@ -43,7 +43,7 @@ class QuestionsOrder(SortableStackedInline):
 class MeetingAdmin(NonSortableParentAdmin):
     fieldsets = [
         (None, {'fields': ['has_started','participants','date_start','date_end']}),
-        ('Meeting informations', {'fields': ['title','desc']}),
+        ('Meeting informations', {'fields': ['title','desc','image']}),
         ('Parameters',{'fields':['code','reward_fastest']})
     ]
     readonly_fields =['participants']
