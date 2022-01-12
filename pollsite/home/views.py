@@ -3,13 +3,16 @@ from .models import TeamMember
 
 import yaml
 from django.utils import timezone
+from django.conf import settings
 import os
 
+# In a cloned deployment, you should use these views to customize the home page
+# In an app deployment, on the poll app is installed to your preexisting main view
 
 def index(request):
-    # NOTE PUT ABSOLUTE PATH OF homePage.yaml here
+    # NOTE PUT PATH OF homePage.yaml here
     # WHYYYYYYY
-    with open('/Users/romain/Stratus/info/server/tests_beekast/django-polling-site/pollsite/home/homePage.yaml', 'r') as file:
+    with open(os.path.join(settings.BASE_DIR, 'home/homePage.yaml'), 'r') as file:
         homePageElements = yaml.full_load(file)
     team = TeamMember.objects.order_by('title')
     context = {'hpe': homePageElements, 'team': team}
@@ -17,6 +20,4 @@ def index(request):
 
 # We absolutely do not need this
 def opnsrc(request):
-    now = timezone.now()
-    context = {'now': now}
-    return render(request, 'home/license', context)
+    return render(request, 'home/license', {})

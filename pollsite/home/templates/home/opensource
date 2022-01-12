@@ -2,8 +2,6 @@
 
 <section>
     <div>
-        <h1>NOW IS {{now}}</h1>
-        <br>
         <h1>Open Source</h1>
         <h3>Several fantastic pieces of free and open-source programming languages and frameworks have
             really helped get me do what I did like this web Application.
