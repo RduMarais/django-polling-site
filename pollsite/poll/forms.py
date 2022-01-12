@@ -1,4 +1,5 @@
 from django import forms
+from .models import Choice, Question
 
 class WordForm(forms.Form):
     choice = forms.CharField(label='Add a word', max_length=100)

@@ -18,8 +18,8 @@
 	<div class="container px-5 py-24 mx-auto">
 		<div class="-my-8 text-2xl">Current Question : 
 		<a href="{% url 'poll:vote' current_question.id %}">{{ current_question.title }}</a>
+		<button id="start-button">Click</button>
 
-		
 
 	</div>
 	</div>
@@ -54,5 +54,28 @@
 </section>
 {% endif %}
 
-
 {% endblock  %}
+
+{% block javascript %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	$(document).ready(function () { //starts js when loaded
+		$("#start-button").click( function(){
+			$.ajax({
+				data:"test=yolo",
+				url:"{% url 'poll:testurl' %}",
+                type: "POST"
+				// success: function (response){
+				// 	console.log('ok');
+				// },
+				// error: function (response){
+				// 	console.log('echec')
+				// }
+			});
+			return false;
+		});
+	})
+</script>
+{% endblock %}
+

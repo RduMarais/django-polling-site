@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect,JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.db.models import Q
@@ -22,6 +22,7 @@ def index(request):
 	context = {'meetings':meetings_list }
 	return render(request, 'poll/index', context)
 
+
 # Once you enter a meeting, this is the page displaying the current question and previous results
 def meeting(request, meeting_id):
 	meeting = get_object_or_404(Meeting, pk=meeting_id)
@@ -37,6 +38,7 @@ def meeting(request, meeting_id):
 			'previous_question_list': meeting.question_set.filter(is_done=True).order_by('question_order') 
 		}
 		return render(request, 'poll/meeting', context)
+
 
 def login(request,meeting_id):
 	meeting = get_object_or_404(Meeting, pk=meeting_id)
@@ -58,9 +60,18 @@ def login(request,meeting_id):
 		else:
 			return render(request,'poll/login',{'meeting':meeting})
 	else:
-		return HttpResponseRedirect(reverse('poll:meeting', args=(meeting.id,)))
+		return HttpResponseRedirect(reverse('poll:meeting'))
 
-
+# test without a meeting URL
+def testurl(request):
+	# print('TEST URL hit')
+	if('attendee_id' in request.session):
+		attendee = Attendee.objects.get(pk=request.session['attendee_id'])
+		meeting = attendee.meeting
+		context = {'test':'yes'}
+		return JsonResponse(context,status=200)
+	else:
+		return HttpResponseRedirect(reverse('poll:index', args=()))
 
 # return view for word clouds -> returns to "add" template
 def added(request, question_id):
