@@ -33,10 +33,14 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 # migration to django > 3.2
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# For channels deploymment
+ASGI_APPLICATION = 'pollsite.asgi.application'
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'home.apps.HomeConfig',
     'poll.apps.PollConfig',
     'django_toggle_switch_widget',
@@ -141,3 +145,4 @@ MEDIA_ROOT = 'media/'
 # For Markdown formatting
 # TODO before deployment
 SITE_URL = "http://localhost"
+
