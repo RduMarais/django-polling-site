@@ -16,7 +16,7 @@ btn2Url : https://github.com/RduMarais/LibreKast
 
 midTitle : How to deploy
     
-midDesc : A comprehensive guide to deployment is available on GitHub README. In order to setup LibreKast in an deployment envionment, one needs to setup a web server (such as Apache or Nginx), setup the server for delivering a django app and clone the repository to start the app. Then for deployment a comprehensive checklist is available on GitHub to explain how to seed the application secrets; remove debugging functionalities; create an admin user etc.  
+midDesc : A comprehensive guide to deployment is available on GitHub README. In order to setup LibreKast in an deployment envionment, one needs to setup a web server (such as Apache or Nginx), setup the server for delivering a django app and clone the repository to start the app. Then for deployment a comprehensive checklist is available on GitHub to explain how to seed the application secrets; remove debugging functionalities; collect static files; create an admin user etc.  
 
 teamTitle: State of the development 
 
