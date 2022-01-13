@@ -132,10 +132,10 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR,"static"),
-    "/Users/romain/Stratus/info/server/tests_beekast/django-polling-site/pollsite/static",
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR,"static"),
+#     "/Users/romain/Stratus/info/server/tests_beekast/django-polling-site/pollsite/static",
+# ]
 MEDIA_URL = '/media/'
 MEDIA_ROOT = 'media/'
 

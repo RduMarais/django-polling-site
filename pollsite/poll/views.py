@@ -9,11 +9,22 @@ import datetime
 from .models import Choice, Question, Meeting,Attendee,Vote
 from .forms import WordForm,LoginForm
 
+
+##### UTILS ######
+
+
 def get_previous_user_answers(attendee,question):
 	query = Q(user=attendee)
 	query.add(Q(choice__question__title__contains=question.title),Q.AND)
 	return Vote.objects.filter(query)
 
+
+##### VIEWS ######
+
+async def websocket_testview(socket):
+    await socket.accept()
+    await socket.send_text('hello')
+    await socket.close()
 
 # Index view with all current meetings
 def index(request):
