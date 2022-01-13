@@ -2,4 +2,5 @@
 *.pyc
 __pycache__
 pollsite/media/*
+pollsite/static/*
 pollsite/db.sqlite3
