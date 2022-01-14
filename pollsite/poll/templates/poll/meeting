@@ -61,19 +61,21 @@
 {% block javascript %}
 
 <script>
-    const questionid = document.getElementById('current-question-id').textContent;
-    console.log(questionid);
+    const meeting_id = {{ meeting.id }};
+    var test_index = 1;
+    // const meeting_id = document.getElementById('current-question-id').textContent;
 
     const questionSocket = new WebSocket(
         'ws://'
         + window.location.host
         + '/ws/'
-        + questionid
+        + meeting_id
         + '/'
     );
 
     questionSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
+        console.log('received : '+data);
         document.querySelector('#question-log').value += (data.message + '\n');
     };
 
@@ -87,8 +89,9 @@
         questionSocket.send(JSON.stringify({
             'message': message // this is the format that should be modified
         }));
-        console.log(message);
-        messageInputDom.value = '';
+        console.log('sent :'+message);
+        messageInputDom.value = messageInputDom.value+test_index;
+        test_index ++;
     };
 </script>
 
