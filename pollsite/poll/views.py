@@ -18,7 +18,7 @@ def get_previous_user_answers(attendee,question):
 # Index view with all current meetings
 def index(request):
 	# Gets all meetings happening now (defined with Start time and End Time)
-	meetings_list = Meeting.objects.filter(Q(date_start__time__lte=timezone.now()) & Q(date_end__time__gte=timezone.now()))
+	meetings_list = Meeting.objects.filter(Q(date_start__lte=timezone.now()) & Q(date_end__gte=timezone.now()))
 	context = {'meetings':meetings_list }
 	return render(request, 'poll/index', context)
 

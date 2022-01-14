@@ -17,8 +17,10 @@
 <section class="text-gray-700 body-font overflow-hidden" name="current-question">
 	<div class="container px-5 py-24 mx-auto">
 		<div class="-my-8 text-2xl">Current Question : 
-		<a href="{% url 'poll:vote' current_question.id %}">{{ current_question.title }}</a>
-
+		<a href="{% url 'poll:vote' current_question.id %}" id="current-question-id"><p name="current-question-id">{ {{ current_question.id }} }</p>{{ current_question.title }}</a>
+		<br/>
+		<textarea id="question-log" cols="100" rows="20" label="question log"></textarea>
+		<button value="test" id="question-test">Send test</button>
 		
 
 	</div>
@@ -57,5 +59,37 @@
 {% endblock  %}
 
 {% block javascript %}
+
+<script>
+    const questionid = document.getElementById('current-question-id').textContent;
+    console.log(questionid);
+
+    const questionSocket = new WebSocket(
+        'ws://'
+        + window.location.host
+        + '/ws/'
+        + questionid
+        + '/'
+    );
+
+    questionSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        document.querySelector('#question-log').value += (data.message + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#question-test').onclick = function(e) {
+        const messageInputDom = document.querySelector('#question-test');
+        const message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        console.log(message);
+        messageInputDom.value = '';
+    };
+</script>
 
 {% endblock %}
