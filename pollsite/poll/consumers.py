@@ -12,6 +12,9 @@ class QuestionConsumer(WebsocketConsumer):
 		self.meeting_group_name = 'meeting_'+str(self.meeting.id)
 
 		# TODO get user id
+		session = self.scope['session']
+		self.attendee_id = session['attendee_id']
+		print(self.attendee_id)
 
 		# Join group
 		# don't think i need to setup a channel group here as there is no socket-to-socket
