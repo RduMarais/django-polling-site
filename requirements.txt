@@ -17,3 +17,4 @@ Pillow-9.0.0
 
 # for channels
 channels-3.0.4
+channels-redis-3.3.1
