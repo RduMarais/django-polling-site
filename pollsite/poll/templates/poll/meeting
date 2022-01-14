@@ -16,14 +16,20 @@
 {% if current_question %}
 <section class="text-gray-700 body-font overflow-hidden" name="current-question">
 	<div class="container px-5 py-24 mx-auto">
-		<div class="-my-8 text-2xl">Current Question : 
-		<a href="{% url 'poll:vote' current_question.id %}"><p id="current-question-id" name="current-question-id">{{ current_question.id }}</p>{{ current_question.title }}</a>
-		<br/>
-		<textarea id="question-log" cols="100" rows="20" label="question log"></textarea>
-		<button value="test" id="question-test">Send test</button>
-		
+		<div class="-my-8 text-2xl">
+			Current Question : <span id="current-question-id" name="current-question-id" value=""></span>
+			<div id="question-description" style=""></div>
+		</div>
+		<div id="question-content" style="">
 
-	</div>
+			<!-- HERE GOES ALL DYNAMIC CODE -->
+		
+		</div>
+		<br>
+		<div id="question-div-test">
+			<button id="question-test" value="question-test">TEST CLICK</button>
+			TEST DEBUG MESSAGE : <span id="question-message-log"></span>
+		</div>
 	</div>
 </section>
 {% endif %}
@@ -61,38 +67,40 @@
 {% block javascript %}
 
 <script>
-    const meeting_id = {{ meeting.id }};
-    var test_index = 1;
-    // const meeting_id = document.getElementById('current-question-id').textContent;
+	const meeting_id = {{ meeting.id }};
+	const questionSocket = new WebSocket(
+		'ws://'
+		+ window.location.host
+		+ '/ws/'
+		+ meeting_id
+		+ '/'
+	);
+	var questionTitle = document.querySelector('#current-question-id');
+	var questionDesc = document.querySelector('#question-description');
 
-    const questionSocket = new WebSocket(
-        'ws://'
-        + window.location.host
-        + '/ws/'
-        + meeting_id
-        + '/'
-    );
+	questionSocket.onmessage = function(e) {
+		console.log('received something');
+		const data = JSON.parse(e.data);
+		console.log('received : '+data['question']['title']);
+		questionTitle.textContent = data['question']['title']
+		questionDesc.innerHTML = data['question']['desc'] // NOT WC
+		document.querySelector('#question-message-log').textContent = (data.message + '\n');
 
-    questionSocket.onmessage = function(e) {
-        const data = JSON.parse(e.data);
-        console.log('received : '+data);
-        document.querySelector('#question-log').value += (data.message + '\n');
-    };
+	};
 
-    questionSocket.onclose = function(e) {
-        console.error('Chat socket closed unexpectedly');
-    };
+	questionSocket.onclose = function(e) {
+		console.error('Chat socket closed unexpectedly');
+	};
 
-    document.querySelector('#question-test').onclick = function(e) {
-        const messageInputDom = document.querySelector('#question-test');
-        const message = messageInputDom.value;
-        questionSocket.send(JSON.stringify({
-            'message': message // this is the format that should be modified
-        }));
-        console.log('sent :'+message);
-        messageInputDom.value = messageInputDom.value+test_index;
-        test_index ++;
-    };
+	document.querySelector('#question-test').onclick = function(e) {
+		const messageInputDom = document.querySelector('#question-test');
+		const message = messageInputDom.value;
+		questionSocket.send(JSON.stringify({
+			'message': message // this is the format that should be modified
+		}));
+		console.log('sent :'+message);
+
+	};
 </script>
 
 {% endblock %}

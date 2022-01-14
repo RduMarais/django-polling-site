@@ -36,6 +36,10 @@ class Meeting(models.Model):
 	def participants(self):
 		return len(self.attendee_set.all())
 
+	def current_question(self):
+		return self.question_set.order_by('question_order').filter(is_done=False)[0]
+
+
 # model to hold the attendee's name 
 #   (which allows to create a top and them to give themselves cool names)
 # 	the model name is attendee in order not to confuse with django users 

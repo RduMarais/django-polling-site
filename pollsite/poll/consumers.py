@@ -11,10 +11,9 @@ class QuestionConsumer(WebsocketConsumer):
 		self.meeting = Meeting.objects.get(pk=meeting_id)
 		self.meeting_group_name = 'meeting_'+str(self.meeting.id)
 
-		# TODO get user id
-		session = self.scope['session']
-		self.attendee_id = session['attendee_id']
-		print(self.attendee_id)
+		attendee_id = self.scope['session']['attendee_id']
+		self.attendee = Attendee.objects.get(pk=attendee_id)
+		# print("WS cnnect start : attendee = "+str(self.attendee.name))
 
 		# Join group
 		# don't think i need to setup a channel group here as there is no socket-to-socket
@@ -23,6 +22,8 @@ class QuestionConsumer(WebsocketConsumer):
 			self.meeting_group_name,
 			self.channel_name
 		)
+
+		# print("WS cnnect OK")
 
 		self.accept()
 
@@ -38,13 +39,26 @@ class QuestionConsumer(WebsocketConsumer):
 		text_data_json = json.loads(text_data)
 		message_in = text_data_json['message']  # this is the format that should be modified
 
+		message_out = "test NOK"
+		print('WS received get question')
+		question = self.meeting.current_question()
+		print('WS received get question OK')
 
-		message_out = "Response received"
-		print(message_in)
+		# si recoit message : question-test -> changer pour Next question
+		if(message_in == "question-test"):
+			print('WS received question test ok')
+			message_out = {
+				'message' : "test ok",
+				'question':{
+					'title': question.title,
+					'desc': question.desc_rendered,
+					'type': question.question_type,
+				},
+			}
 
-		self.send(text_data=json.dumps({
-			'message': message_out
-		}))
+		print(message_out)
+
+		self.send(text_data=json.dumps(message_out))
 
 	def send_question(self,question):
 		# message_in = event['message']
