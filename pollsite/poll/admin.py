@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.html import format_html
 from django.urls import reverse
 from django.db import models
+from django.utils import timezone
 
 from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
 
@@ -48,8 +49,18 @@ class MeetingAdmin(NonSortableParentAdmin):
     ]
     readonly_fields =['participants']
     inlines = [QuestionsOrder]
-    list_display = ('title', 'activities','participants','has_started')
+    list_display = ('title', 'activities','participants','is_ongoing')
     search_fields = ['title','description']
+
+    def is_ongoing(self,obj):
+        if(obj.date_start <= timezone.now() and obj.date_end >= timezone.now()):
+            return 'Ongoing Meeting'
+        elif(obj.date_end <= timezone.now()):
+            return 'Past Meeting'
+        elif(obj.date_start >= timezone.now()):
+            return 'Future Meeting'
+        else:
+            return 'Schedule Error'
 
 # Attendee score table
 class AttendeeAdmin(admin.ModelAdmin):
