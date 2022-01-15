@@ -15,22 +15,17 @@
 
 {% if current_question %}
 <section class="text-gray-700 body-font overflow-hidden" name="current-question">
-	<div class="container px-5 py-24 mx-auto">
-		<div class="-my-8 text-2xl">
-			Current Question : <span id="current-question-id" name="current-question-id" value=""></span>
-			<div id="question-description" style=""></div>
-		</div>
-		<div id="question-content" style="">
-
-			<!-- HERE GOES ALL DYNAMIC CODE -->
-		
-		</div>
-		<br>
-		<div id="question-div-test">
-			<button id="question-test" value="question-test">TEST CLICK</button>
-			TEST DEBUG MESSAGE : <span id="question-message-log"></span>
+	<div class="container px-5 py-24 mx-auto" id="question-div">
+		<div class="-my-8 text-2xl text-center">
+			<span id="current-question-id" name="current-question-id" value=""></span>
+			<div id="question-description" class="leading-relaxed text-center text-center"></div>
 		</div>
 	</div>
+	<div class="container px-5 py-24 mx-auto text-center" id="start-div">
+		<button id="question-start" value="question-start" class="bg-red-600 hover:bg-red-800 text-white text-center font-bold py-2 px-4 rounded">START</button>
+	</div>
+		<br/>
+		TEST DEBUG MESSAGE : <span id="question-message-log"></span>
 </section>
 {% endif %}
 
@@ -51,8 +46,8 @@
 						See results >
 					</a>
 					</h2>
-					<p class="leading-relaxed">{{question.desc}}
-					</p>
+					<!-- <p class="leading-relaxed">{{question.desc}}
+					</p> -->
 				</div>
 			</div>
 			{% endfor %}
@@ -75,41 +70,103 @@
 		+ meeting_id
 		+ '/'
 	);
+	const choiceColors = ['blue','indigo','purple','pink','sky','violet'];
 	var questionTitle = document.querySelector('#current-question-id');
 	var questionDesc = document.querySelector('#question-description');
 
+	function showWait(){
+		console.log('not implemented yet');
+	}
+
+	function libreKastVote(choice){
+		console.log('clicked : '+choice.innerText);
+		message_out = JSON.stringify({
+			'message': "vote",
+			'question':questionTitle.value,
+			'choice':choice.value ,
+		});
+		questionSocket.send(message_out);
+		console.log('send : '+message_out);
+
+	}
+
 	function showQuestionText(questionObj){
-		questionTitle.textContent = questionObj['title']
-		questionDesc.innerHTML = questionObj['desc'] // NOT WC
-		questionDesc.class = "leading-relaxed"; // test
-		
-		if(question['type'] === 'WC'){showWordCloud(questionObj);};
-		if(question['type'] !== 'TX'){showWord}
+		questionTitle.textContent = questionObj['title'];
+		questionTitle.value = questionObj['id'];
+		questionDesc.innerHTML = questionObj['desc'];
+		// questionDesc.class = "leading-relaxed py-4 flex text-center"; 
+
+		if(questionObj['type'] === 'WC'){showWordCloud(questionObj);}
+		else if(questionObj['type'] !== 'TX'){showChoices(questionObj['choices'])}
+
+	}
+
+	function showWordCloud(questionObj){
+		content = document.createElement("div");
+		content.id = "question-content";
+		document.querySelector('#question-div').appendChild(content);
+		console.log('not implemented yet');
+	}
+
+	function showChoices(choicesArray){
+		content = document.createElement("div");
+		content.id = "question-content";
+		content.classList.add("py-8"); 
+		content.classList.add("px-2"); 
+		content.style="";
+
+		let l = document.createElement("ul");
+		l.id="choice-table";
+		content.appendChild(l);
+		for(i in choicesArray){
+			let c = document.createElement("li");
+			c.innerText = choicesArray[i].text;
+			c.id = 'choice-'+choicesArray[i].id;
+			c.value = choicesArray[i].id;
+			c.classList.add("bg-"+choiceColors[i]+"-400");
+			c.classList.add("hover:bg-"+choiceColors[i]+"-700");
+			c.classList.add("text-white");
+			c.classList.add("text-center");
+			c.classList.add("py-2");
+			c.classList.add("px-4");
+			c.classList.add("rounded");
+			c.classList.add("librekast-choice");
+			c.onclick = function() { libreKastVote(this); };
+			content.children[0].appendChild(c);
+		}
+		document.querySelector('#question-div').appendChild(content);
 	}
 
 	questionSocket.onmessage = function(e) {
 		console.log('received something');
 		const data = JSON.parse(e.data);
-		console.log('received : '+data['question']['title']);
-		// TODO check if question
-		showQuestionText(data['question']);
-		document.querySelector('#question-message-log').textContent = (data.message + '\n');
+		console.log('received : '+JSON.stringify(data['question']));
+		if(data['message']==='question-go'){
+			showQuestionText(data['question']);
+		}
+			document.querySelector('#question-message-log').textContent = (data.message + '\n');
 
 	};
 
 	questionSocket.onclose = function(e) {
-		console.error('Chat socket closed unexpectedly');
+		console.error('Question socket closed');
 	};
 
-	document.querySelector('#question-test').onclick = function(e) {
-		const messageInputDom = document.querySelector('#question-test');
+
+	// start function
+	document.querySelector('#question-start').onclick = function(e) {
+		const messageInputDom = document.querySelector('#question-start');
 		const message = messageInputDom.value;
+		// this should be removed to have asynchronous receive of question
 		questionSocket.send(JSON.stringify({
-			'message': message // this is the format that should be modified
+			'message': message, 
 		}));
+		const startDivNode = document.querySelector('#start-div');
+		startDivNode.remove()
+		showWait();
 		console.log('sent :'+message);
-
 	};
+
 </script>
 
 {% endblock %}

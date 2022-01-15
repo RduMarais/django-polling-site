@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
 
-from .models import Question, Choice, Meeting, Attendee
+from .models import Question, Choice, Meeting, Attendee, Vote
 
 # administration of choices once in Question admin panel
 class ChoiceInline(admin.TabularInline):
@@ -76,6 +76,14 @@ class AttendeeAdmin(admin.ModelAdmin):
         link=reverse("admin:poll_meeting_change", args=[obj.meeting.id])
         return format_html('<a href="%s">%s</a>' % (link,obj.meeting.title))
 
+class VoteAdmin(admin.ModelAdmin):
+    readonly_fields =['choice', 'user']
+    list_display =('choice', 'get_user','id')
+
+    def get_user(self,obj):
+        return obj.user.name
+
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Meeting, MeetingAdmin)
 admin.site.register(Attendee, AttendeeAdmin)
+admin.site.register(Vote, VoteAdmin)
