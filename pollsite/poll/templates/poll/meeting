@@ -78,12 +78,21 @@
 	var questionTitle = document.querySelector('#current-question-id');
 	var questionDesc = document.querySelector('#question-description');
 
+	function showQuestionText(questionObj){
+		questionTitle.textContent = questionObj['title']
+		questionDesc.innerHTML = questionObj['desc'] // NOT WC
+		questionDesc.class = "leading-relaxed"; // test
+		
+		if(question['type'] === 'WC'){showWordCloud(questionObj);};
+		if(question['type'] !== 'TX'){showWord}
+	}
+
 	questionSocket.onmessage = function(e) {
 		console.log('received something');
 		const data = JSON.parse(e.data);
 		console.log('received : '+data['question']['title']);
-		questionTitle.textContent = data['question']['title']
-		questionDesc.innerHTML = data['question']['desc'] // NOT WC
+		// TODO check if question
+		showQuestionText(data['question']);
 		document.querySelector('#question-message-log').textContent = (data.message + '\n');
 
 	};
