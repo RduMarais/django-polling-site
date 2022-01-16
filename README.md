@@ -10,50 +10,64 @@ django-polling_site ( Life's First Django Project)
 [![No Maintenance Intended | Archived](http://unmaintained.tech/badge.svg)](https://gitHub.com/aahnik/django-polling_site/graphs/commit-activity)
 
 
-[**SEE SCREENSHOTS**](https://github.com/aahnik/django-polling_site/tree/master/ScreenShots)
+[**see screenshots**](https://github.com/aahnik/django-polling_site/tree/master/ScreenShots)
 
-## HOW TO RUN ON YOUR COMPUTER
+## Project state
+
+ * [ ] `channels` branch
+         * https://channels.readthedocs.io/en/latest/tutorial/part_2.html
+         * [ ] front : showWait()
+         * [ ] WC and results synchros
+         * [ ] back : sync notificaton from admin 
+         * [ ] back : admin widget for handling question order
+         * rewrite code as async if needed
+ * [ ] TUTO deployment & customization
+ * [ ] home as django models (for non-technical people)
+ * [ ] docker wrapping
+ * [ ] django app wrapping
+ * [ ] FR translation
+
+
+## How to run on your computer
 
 __pre-requisites : python(3.8 or above) and pip must be installed__ 
 
 
 
-**1. CREATE AND ACTIVATE A VIRTUAL ENVIRONMENT INSIDE A NEW DIRECTORY**
+**1. create and activate a virtual environment inside a new directory**
 
-Virtual Environments are a great way to wrap python projects. I have stopped working on this repo on Jul 15 2020. At the time of my work I have used the latest versions of python and django. If you are reading this after 2020, chances are new versions of python and django might have rolled out . So to ensure that old code runs smoothly , create a virtual environment. 
+if you are new to virtual environments read [python-3 official docs](https://docs.python.org/3/library/venv.html) 
 
-*Using Virtual Environments ensures the dependancies of each project is independently availaible and there is no headache of breakage of code and 
-EVERY PROJECT STAYS INDEPENDENT OF ONE ANOTHER* 
-
-IF YOU ARE NEW TO VIRTUAL ENVIRONMENTS READ [PYTHON-3 OFFICIAL DOCS](https://docs.python.org/3/library/venv.html) 
-
-**2. CLONE THIS REPO `django-polling-site` IN YOUR DIRECTORY, AND INSTALL THE REQUIREMENTS**
+**2. clone this repo `django-polling-site` in your directory, and install the requirements**
 
 ```
 pip install -r requirements.txt
 ```
 
-**3. MOVE INSIDE THE `pollsite` DIRECTORY AND MAKE MIGRATIONS**
+**3. move inside the `pollsite` directory and make migrationS**
 
 ```
-python manage.py makemigrations poll
 python manage.py makemigrations home
+python manage.py makemigrations poll
 python manage.py migrate
 ```
 
-**4. CREATE A SUPERUSER , WITH YOUR OWN USERNAME AND PASSWORD**
+**4. create a superuser , with your own username and password**
 
 ```
 python manage.py createsuperuser
 ```
 
-**5. POPULATE DATABASE WITH DUMMY DATA OF QUESTIONS AND CHOICES, BY RUNNING THE `populator_script` FROM DJANGO SHELL**
-[click here to see how](https://github.com/aahnik/django-polling_site#running-scripts-from-django-shell)
+**5. Collect Static files needed**
+
+```
+python manage.py collectstatic
+```
 
 **6. Inside the `home` app directory , configure the homePage.yaml according to your wish**
 Inside `views.py` of same directory, put the absolute path of homePage.yaml in the place instructed. 
 
-**NOW RUN THE SERVER**
+**7. now run the server**
 
 ```
 python manage.py runserver
@@ -71,48 +85,3 @@ You can add team members , change or add questions and choices
 
 __you can now play around with the code your self__
 
-
-## RUNNING SCRIPTs FROM DJANGO SHELL 
-
-> inside apps you can't write your own scripts because they are run by django. Running a module directly will give lots of import errors
-
-_YOU WILL GET ERRORS IF YOU RUN THESE SCRIPT IN CWD CONTEXT_
-
-DON'T RUN DIRECTLY LIKE 
-
-```shell
-python3 script.py
-```
- 
-
-
-
-**The `exec()` Function**
-
-`exec()` function is used for the dynamic execution of Python program 
-which can either be in form of a  string or object code. If it is a **string**, 
-the _string is parsed as a suite of Python statements_ which is then executed
- _unless a syntax error occurs_ and if it is an object code, it is simply executed.
-
-
-1. START THE **DJANGO SHELL**  BY RUNNING 
-
-```shell
-$ python3 manage.py shell
-```
-(because Django Shell offers special access features)
-
-2. LOAD THE SCRIPT IN A VARIABLE
-
-```shell
->>> script = open(script_path).read()
-```
-
-3. EXECUTE THE SCRIPT IN PYTHON CONSOLE RUNNING IN DJANGO CONTEXT 
-
-```
->>> exec(script)
-```
- **UPDATE : A BETTER WAY**
- 
- `python3 manage.py shell < myScript.py`

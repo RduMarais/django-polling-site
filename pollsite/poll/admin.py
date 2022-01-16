@@ -3,6 +3,7 @@ from django.utils.html import format_html
 from django.urls import reverse
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 from adminsortable.admin import NonSortableParentAdmin, SortableStackedInline
 
@@ -86,4 +87,5 @@ class VoteAdmin(admin.ModelAdmin):
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Meeting, MeetingAdmin)
 admin.site.register(Attendee, AttendeeAdmin)
-admin.site.register(Vote, VoteAdmin)
+if(settings.DEBUG):
+    admin.site.register(Vote, VoteAdmin) # for debug
