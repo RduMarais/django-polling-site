@@ -18,8 +18,6 @@ class QuestionConsumer(WebsocketConsumer):
 		# print("WS cnnect start : attendee = "+str(self.attendee.name))
 
 		# Join group
-		# don't think i need to setup a channel group here as there is no socket-to-socket
-		#   communication or logic required
 		async_to_sync(self.channel_layer.group_add)(
 			self.meeting_group_name,
 			self.channel_name
@@ -36,7 +34,17 @@ class QuestionConsumer(WebsocketConsumer):
 			self.channel_name
 		)
 
+	# Receive message from meeting group
+	def meeting_message(self, event):
+		message = event['message']
 
+		# Send message to WebSocket
+		self.send(text_data=json.dumps({
+			'message': message
+		}))
+
+
+	# receive message from client
 	def receive(self, text_data):
 		text_data_json = json.loads(text_data)
 		message_in = text_data_json['message']  # this is the format that should be modified
@@ -74,19 +82,29 @@ class QuestionConsumer(WebsocketConsumer):
 				vote=Vote(user=self.attendee,choice=choice)
 				vote.save()
 
-				if(choice.isTrue):
+				if(choice.isTrue and question.question_type =='QZ'):
 					if(question.first_correct_answer):
 						question.first_correct_answer = False
 						question.save()
 						self.attendee.score +=1
 					self.attendee.score +=1
 					self.attendee.save()
-				message_out = {'message':'voted'}
+
+				
+				if(question.question_type =='QZ'):
+					message_out = {'message':'voted'}
+					self.send(text_data=json.dumps(message_out)) #
+				elif(question.question_type =='PL'):
+					print('WS async notif update poll start')
+					self.send_results(question)
+					# OK
+					# async update all users
+					self.notify_update_PL(question,choice)
 			else:
 				message_out = {'message':'error : already voted'}
+				self.send(text_data=json.dumps(message_out)) #
 		except:
 			message_out = {'message':'error : something happened'}
-		else:
 			self.send(text_data=json.dumps(message_out)) #
 
 
@@ -127,4 +145,17 @@ class QuestionConsumer(WebsocketConsumer):
 			message_out['results'].append(choice_obj)
 		print(message_out)
 		self.send(text_data=json.dumps(message_out))
+
+	def notify_update_PL(self,question,choice):
+		print("WS start notify update Poll")
+		async_to_sync(self.channel_layer.group_send)(
+			self.meeting_group_name,
+			{
+				'type': 'meeting_message',
+				'message': 'notify-update-poll',
+				'vote': choice.id,
+			}
+		)
+		print("group : update +choice.id")
+
 

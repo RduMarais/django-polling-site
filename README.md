@@ -26,6 +26,34 @@ django-polling_site ( Life's First Django Project)
  * [ ] django app wrapping
  * [ ] FR translation
 
+## (channels branch) State diagram 
+
+based on current implem (not the final goal)
+```
+CLIENT                                     SERVER                           GROUP
+  |                                           |                               |
+  |          --> question-start -->           |                               |
+  |                                    get current question                   |
+  |             <-- question-go <--           |                               |
+ showQuestion                                 |                               |
+  |                                           |                               |
+  |          --> vote -->                     |                               |
+  |                <-- voted <--              |                               |
+  |                                         if Poll :                         |
+  |                <-- results <--            |   --> notify-update-poll -->  |
+  |                                           |                               |
+  |                                           |                               |
+  wait for results                            |                               |
+  |          --> debug-results  -->           |                               |
+  |                <-- results <--            |                               |
+  |                                           |                               |
+  |                                           |                               |
+  |                                           |                               |
+  |                                           |                               |
+  |                                           |                               |
+  |                                           |                               |
+  |                                           |                               |
+```
 
 ## How to run on your computer
 

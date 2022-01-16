@@ -75,7 +75,7 @@
 	var questionDesc = document.querySelector('#question-description');
 
 	function showWait(){
-		console.log('not implemented yet');
+		questionTitle.innerText = "Your Question is about to start...";
 	}
 
 	function libreKastVote(choice){
@@ -213,8 +213,9 @@
 		document.querySelector('#question-div').appendChild(content);
 	}
 
+	//main fuction : receive messages
 	questionSocket.onmessage = function(e) {
-		console.log('received something');
+		console.log('received data : '+e.data);
 		const data = JSON.parse(e.data);
 		if(data['message']==='question-go'){
 			showQuestionText(data['question']);
@@ -225,6 +226,8 @@
 		} else if(data['message']==='question-ready'){
 			showWait();
 			console.log('not implemented yet');
+		} else if(data['message']==='notify-update-poll'){
+			console.log('notify-update-poll');
 		}
 		
 		document.querySelector('#question-message-log').textContent = (data.message + '\n');
