@@ -15,7 +15,6 @@ django-polling_site ( Life's First Django Project)
 ## Project state
 
  * [ ] `channels` branch
-         * https://channels.readthedocs.io/en/latest/tutorial/part_2.html
          * [ ] front : showWait()
          * [ ] WC and results synchros
          * [ ] back : sync notificaton from admin 
