@@ -17,7 +17,8 @@ django-polling_site ( Life's First Django Project)
  * `channels` branch
      * [ ] front : showWait()
      * [x] poll results synchros
-     * [ ] WC 
+     * [-] WC 
+         * ONGOING
      * [ ] back : sync notificaton from admin 
      * [ ] back : admin widget for handling question order
      * rewrite code as async if needed

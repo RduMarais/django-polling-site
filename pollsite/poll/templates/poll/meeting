@@ -225,6 +225,7 @@
 		console.log('TODO');
 	}
 
+	// NOT TESTED
 	function showWordCloud(questionObj){
 		wordCloudData = questionObj['data'];
 
