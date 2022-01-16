@@ -37,10 +37,9 @@ class QuestionConsumer(WebsocketConsumer):
 	# Receive message from meeting group
 	def meeting_message(self, event):
 		message = event['message']
-
 		# Send message to WebSocket
 		self.send(text_data=json.dumps({
-			'message': message
+			'message': message,
 		}))
 
 
@@ -152,8 +151,10 @@ class QuestionConsumer(WebsocketConsumer):
 			self.meeting_group_name,
 			{
 				'type': 'meeting_message',
-				'message': 'notify-update-poll',
-				'vote': choice.id,
+				'message': {
+					'message':'notify-update-poll',
+					'vote': choice.id,
+				}
 			}
 		)
 		print("group : update +choice.id")

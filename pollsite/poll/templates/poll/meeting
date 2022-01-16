@@ -181,6 +181,11 @@
 		}
 	}
 
+	function updatePoll(voteId){
+		voteListItem = document.querySelector('choice-'+voteId);
+		console.log("TODO");
+	}
+
 	function showWordCloud(questionObj){
 		content = document.createElement("div");
 		content.id = "question-content";
@@ -227,6 +232,7 @@
 			showWait();
 			console.log('not implemented yet');
 		} else if(data['message']==='notify-update-poll'){
+			updatePoll(data['vote']);
 			console.log('notify-update-poll');
 		}
 		
