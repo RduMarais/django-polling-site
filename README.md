@@ -42,6 +42,7 @@ CLIENT                                     SERVER                           GROU
   |                <-- voted <--              |                               |
   |                                         if Poll :                         |
   |                <-- results <--            |   --> notify-update-poll -->  |
+showResultsPoll                               |                           updatePoll
   |                                           |                               |
   |                                           |                               |
   wait for results                            |                               |
