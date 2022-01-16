@@ -73,6 +73,7 @@
 	const choiceColors = ['blue','indigo','purple','pink','sky','violet'];
 	var questionTitle = document.querySelector('#current-question-id');
 	var questionDesc = document.querySelector('#question-description');
+	var wordCloudData = [];
 
 	function showWait(){
 		questionTitle.innerText = "Your Question is about to start...";
@@ -146,9 +147,6 @@
 			
 			choice.appendChild(back);
 			choice.appendChild(bar);
-			// choice.innerText ="";
-			// todo format
-
 		}
 		let p = document.createElement("p");
 		p.className = "mx-4";
@@ -210,11 +208,49 @@
 		console.log('done update poll');
 	}
 
-	function showWordCloud(questionObj){
+	function updateWordCloud(){
+		// don't forget to remove when updating (or redraw chart, in this case move this)
 		content = document.createElement("div");
 		content.id = "question-content";
 		document.querySelector('#question-div').appendChild(content);
-		console.log('not implemented yet');
+
+		var chart = anychart.tagCloud(wordCloudData);
+		chart.title(questionObj['title']);
+		chart.angles([0]);
+		chart.container("question-content");
+		chart.draw();
+	}
+
+	function wcSendWord(word){
+		console.log('TODO');
+	}
+
+	function showWordCloud(questionObj){
+		wordCloudData = questionObj['data'];
+
+		// show form 
+		wcForm = document.createElement("div"); //this is not a form it's dynamic
+		wcForm.id = "question-form";
+		wcInput = document.createElement("input");
+		wcButton = document.createElement("button");
+		wcButton.classList.add("bg-rose-400","hover:bg-rose-700","text-white","text-center","py-2","px-4","my-2","rounded");
+		wcButton.id = "librekast-add";
+		wcButton.onclick=function(item){
+			wcSendWord(wcInput.value);
+		}
+		wcInput.id="librekast-input";
+		wcInput.onkeypress = function(event){
+			if(event.keyCode == 13){
+				wcSendWord(wcInput.value);
+			}
+		}
+		wcForm.appendChild(wcInput);
+		wcForm.appendChild(wcButton);
+
+		document.querySelector('#question-div').appendChild(wcForm);
+
+		// show results
+		updateWordCloud();
 	}
 
 	function showChoices(choicesArray){
@@ -232,8 +268,7 @@
 			c.innerText = choicesArray[i].text;
 			c.id = 'choice-'+choicesArray[i].id;
 			c.value = choicesArray[i].id;
-			c.classList.add("bg-"+choiceColors[i]+"-400");
-			c.classList.add("hover:bg-"+choiceColors[i]+"-700");
+			c.classList.add("bg-"+choiceColors[i]+"-400","hover:bg-"+choiceColors[i]+"-700");
 			c.classList.add("text-white","text-center","py-2","px-4","my-2","rounded");
 			c.classList.add("librekast-choice");
 			c.onclick = function() { libreKastVote(this); };
