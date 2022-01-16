@@ -64,7 +64,6 @@ class QuestionConsumer(WebsocketConsumer):
 
 	# sync method
 	def receive_vote(self,text_data_json):
-		print('Vote : started receiving')
 		try:
 			question = self.meeting.current_question()
 			choice = question.choice_set.get(pk=text_data_json['choice'])
@@ -72,10 +71,8 @@ class QuestionConsumer(WebsocketConsumer):
 			# question = Question.objects.get(pk=text_data_json['question'])
 			print('Vote : choice and question fetched')
 			if(len(get_previous_user_answers(self.attendee,question))==0):
-				print('Vote : fist vote')
 				vote=Vote(user=self.attendee,choice=choice)
 				vote.save()
-				print('Vote : vote saved')
 
 				if(choice.isTrue):
 					if(question.first_correct_answer):
@@ -84,13 +81,10 @@ class QuestionConsumer(WebsocketConsumer):
 						self.attendee.score +=1
 					self.attendee.score +=1
 					self.attendee.save()
-				print('Vote : ok')
 				message_out = {'message':'voted'}
 			else:
-				print('Vote : already voted')
 				message_out = {'message':'error : already voted'}
 		except:
-			print('Vote : error happened')
 			message_out = {'message':'error : something happened'}
 		else:
 			self.send(text_data=json.dumps(message_out)) #
@@ -121,6 +115,7 @@ class QuestionConsumer(WebsocketConsumer):
 			'message' : "results",
 			'results': [],
 			'question_type':question.question_type,
+			'total':question.participants(), #shamelessly reuse this function
 		}
 		for choice in question.choice_set.all():
 			choice_obj = {

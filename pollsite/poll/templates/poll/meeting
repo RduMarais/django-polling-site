@@ -117,8 +117,39 @@
 		else if(questionObj['type'] !== 'TX'){showChoices(questionObj['choices'])}
 	}
 
-	function showResultsPoll(resultsArray){
-		console.log('todo');
+
+	function showResultsPoll(resultsArray,total_votes){
+		for(i in resultsArray){
+			let choice = document.querySelector('#choice-'+resultsArray[i].id);
+			if(choice.classList.contains('librekast-chosen')){
+				choice.classList.add('font-bold');
+				choice.classList.remove("bg-blue-500");
+				choice.classList.replace("text-white","text-"+choiceColors[i]+"-900");
+			} else {
+				choice.classList.remove("bg-blue-200");
+				choice.classList.replace("text-blue-600","text-"+choiceColors[i]+"-900");
+			}
+			choice.classList.add("relative","max-w-xl","overflow-hidden");
+			choice.classList.remove("py-2");
+			let back = document.createElement("div");
+			back.id = "bar-background-"+resultsArray[i].id;
+			back.className="w-full";
+			back.classList.add("h-full","bg-"+choiceColors[i]+"-200","absolute");
+			
+			let bar = document.createElement("div");
+			bar.id="bar-"+resultsArray[i].id;
+			bar.className="h-full";
+			bar.classList.add("bg-"+choiceColors[i]+"-400","relative","w-0");
+			percent = (resultsArray[i].votes / total_votes) *100 ;
+			bar.style.width = percent + "%";
+			bar.innerText = resultsArray[i].votes + " votes";
+			
+			choice.appendChild(back);
+			choice.appendChild(bar);
+			// choice.innerText ="";
+			// todo format
+
+		}
 	}
 
 	function showResultsQuizz(resultsArray){
@@ -136,11 +167,11 @@
 					choice.classList.replace('bg-blue-500','bg-red-500');
 				}
 			} else if(resultsArray[i].isTrue){
-					let s = document.createElement("span");
-					s.innerHTML = "Sorry, the answer was <b>"+resultsArray[i].text+"</b>";
-					questionDesc.appendChild(s);
-					choice.classList.replace('bg-blue-200','bg-green-300');
-					choice.classList.replace('text-blue-600','text-green-600');
+				let s = document.createElement("span");
+				s.innerHTML = "Sorry, the answer was <b>"+resultsArray[i].text+"</b>";
+				questionDesc.appendChild(s);
+				choice.classList.replace('bg-blue-200','bg-green-300');
+				choice.classList.replace('text-blue-600','text-green-600');
 			}
 			let c = document.createElement("span");
 			c.className="text-xs";
@@ -189,7 +220,7 @@
 			showQuestionText(data['question']);
 		} else if(data['message']==='results'){
 			if(data['question_type']=='QZ'){showResultsQuizz(data['results']);}
-			else if(data['question_type']=='PL'){showResultsPoll(data['results']);}
+			else if(data['question_type']=='PL'){showResultsPoll(data['results'],data['total']);}
 			console.log('Show results');
 		} else if(data['message']==='question-ready'){
 			showWait();
