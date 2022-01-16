@@ -122,7 +122,7 @@
 		for(i in resultsArray){
 			let choice = document.querySelector('#choice-'+resultsArray[i].id);
 			if(choice.classList.contains('librekast-chosen')){
-				choice.classList.add('font-bold');
+				choice.classList.add('font-bold',"librekast-choice");
 				choice.classList.remove("bg-blue-500");
 				choice.classList.replace("text-white","text-"+choiceColors[i]+"-900");
 			} else {
@@ -139,7 +139,7 @@
 			let bar = document.createElement("div");
 			bar.id="bar-"+resultsArray[i].id;
 			bar.className="h-full";
-			bar.classList.add("bg-"+choiceColors[i]+"-400","relative","w-0");
+			bar.classList.add("bg-"+choiceColors[i]+"-400","relative","w-0","librekast-bar");
 			percent = (resultsArray[i].votes / total_votes) *100 ;
 			bar.style.width = percent + "%";
 			bar.innerText = resultsArray[i].votes + " votes";
@@ -150,6 +150,12 @@
 			// todo format
 
 		}
+		let p = document.createElement("p");
+		p.className = "mx-4";
+		p.classList.add('my-4','text-center');
+		p.innerText = total_votes+" votes";
+		p.id = 'total-votes';
+		document.querySelector("#question-content").appendChild(p);
 	}
 
 	function showResultsQuizz(resultsArray){
@@ -181,9 +187,27 @@
 		}
 	}
 
+	function updatePollPercentage(voteBar,totalCount){
+		console.log(voteBar.id + "updating");
+		voteCount = parseInt(voteBar.innerText.split()[0]);
+		percent = (voteCount / totalCount) *100 ;
+		voteBar.style.width = percent+"%";
+	}
+
 	function updatePoll(voteId){
-		voteListItem = document.querySelector('choice-'+voteId);
-		console.log("TODO");
+		let totalCountElmt = document.querySelector('#total-votes');
+		let totalCount = parseInt(totalCountElmt.innerText.split()[0]);
+		let voteBar = document.querySelector('#bar-'+voteId);
+		voteCount = parseInt(voteBar.innerText.split()[0]);
+		voteCount++;
+		voteBar.innerText = voteCount + " votes";
+		totalCount++;
+		let choiceBars = document.getElementsByClassName('librekast-bar');
+		[...document.getElementsByClassName("librekast-bar")].forEach(function(item){
+			updatePollPercentage(item,totalCount);
+		});
+		totalCountElmt.innerText = totalCount + " votes";
+		console.log('done update poll');
 	}
 
 	function showWordCloud(questionObj){
