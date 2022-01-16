@@ -14,12 +14,12 @@ django-polling_site ( Life's First Django Project)
 
 ## Project state
 
- * [ ] `channels` branch
-         * [ ] front : showWait()
-         * [ ] WC and results synchros
-         * [ ] back : sync notificaton from admin 
-         * [ ] back : admin widget for handling question order
-         * rewrite code as async if needed
+ * `channels` branch
+     * [ ] front : showWait()
+     * [ ] WC and results synchros
+     * [ ] back : sync notificaton from admin 
+     * [ ] back : admin widget for handling question order
+     * rewrite code as async if needed
  * [ ] TUTO deployment & customization
  * [ ] home as django models (for non-technical people)
  * [ ] docker wrapping
