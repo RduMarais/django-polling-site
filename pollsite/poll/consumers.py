@@ -50,10 +50,17 @@ class QuestionConsumer(WebsocketConsumer):
 		elif(message_in == "vote"):
 			print('WS received vote')
 			async_to_sync(self.receive_vote(text_data_json))
+		elif(message_in == "debug-results"):
+			print('WS received get-results')
+			question = self.meeting.current_question()
+			self.send_results(question)
 		else:
 			message_out = "{'message':'error'}"
 			print(message_out)
 			self.send(text_data=message_out)
+
+
+	###### Functional logic #####
 
 	# sync method
 	def receive_vote(self,text_data_json):
@@ -90,7 +97,6 @@ class QuestionConsumer(WebsocketConsumer):
 
 
 	def send_question(self,question):
-		
 		message_out = {
 			'message' : "question-go",
 			'question':{
@@ -107,6 +113,23 @@ class QuestionConsumer(WebsocketConsumer):
 				'text':choice.choice_text,
 			}
 			message_out['question']['choices'].append(choice_obj)
+		print(message_out)
+		self.send(text_data=json.dumps(message_out))
+
+	def send_results(self,question):
+		message_out = {
+			'message' : "results",
+			'results': [],
+			'question_type':question.question_type,
+		}
+		for choice in question.choice_set.all():
+			choice_obj = {
+				'id':choice.id,
+				'text':choice.choice_text,
+				'votes':choice.votes(),
+				'isTrue':choice.isTrue,
+			}
+			message_out['results'].append(choice_obj)
 		print(message_out)
 		self.send(text_data=json.dumps(message_out))
 

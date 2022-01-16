@@ -88,17 +88,66 @@
 		questionSocket.send(message_out);
 		console.log('send : '+message_out);
 
+		choice.onclick="";
+		choice.classList.replace('librekast-choice','librekast-chosen'); 
+		choice.className = "librekast-chosen";
+		choice.classList.add("bg-blue-500","text-white");
+		choice.classList.add("text-center","py-2","px-4","my-2","rounded");
+		let choiceButtons = document.getElementsByClassName('librekast-choice');
+		console.log(choiceButtons.length);
+		for(let a in choiceButtons){
+			choiceButtons[a].className ="librekast-choice"; 
+			console.log('choice button : '+choiceButtons[a].innerText);
+			choiceButtons[a].classList.add("bg-blue-200","text-blue-600");
+			choiceButtons[a].classList.add("text-center","py-2","px-4","my-2","rounded");
+			choiceButtons[a].onclick="";
+		}
+		choice.classList.add("librekast-choice");
+		// in case there is need to resend vote
 	}
 
 	function showQuestionText(questionObj){
 		questionTitle.textContent = questionObj['title'];
 		questionTitle.value = questionObj['id'];
+		questionTitle.classList.add('librekast-'+questionObj['type']);
 		questionDesc.innerHTML = questionObj['desc'];
 		// questionDesc.class = "leading-relaxed py-4 flex text-center"; 
 
 		if(questionObj['type'] === 'WC'){showWordCloud(questionObj);}
 		else if(questionObj['type'] !== 'TX'){showChoices(questionObj['choices'])}
+	}
 
+	function showResultsPoll(resultsArray){
+		console.log('todo');
+	}
+
+	function showResultsQuizz(resultsArray){
+		// consider that the choices are still here
+		for(i in resultsArray){
+			// or could use array of choice elmts
+			let choice = document.querySelector('#choice-'+resultsArray[i].id);
+			if(choice.classList.contains('librekast-chosen')){
+				if(resultsArray[i].isTrue){
+					let s = document.createElement("span");
+					s.innerHTML = "Yes, the answer is <b>"+resultsArray[i].text+"</b>";
+					questionDesc.appendChild(s);
+					choice.classList.replace('bg-blue-500','bg-green-500');
+				} else{
+					choice.classList.replace('bg-blue-500','bg-red-500');
+				}
+			} else if(resultsArray[i].isTrue){
+					let s = document.createElement("span");
+					s.innerHTML = "Sorry, the answer was <b>"+resultsArray[i].text+"</b>";
+					questionDesc.appendChild(s);
+					choice.classList.replace('bg-blue-200','bg-green-300');
+					choice.classList.replace('text-blue-600','text-green-600');
+			}
+			let c = document.createElement("span");
+			c.className="text-xs";
+			c.classList.add("px-4");
+			c.innerText = resultsArray[i].votes + " votes";
+			choice.appendChild(c);
+		}
 	}
 
 	function showWordCloud(questionObj){
@@ -125,11 +174,7 @@
 			c.value = choicesArray[i].id;
 			c.classList.add("bg-"+choiceColors[i]+"-400");
 			c.classList.add("hover:bg-"+choiceColors[i]+"-700");
-			c.classList.add("text-white");
-			c.classList.add("text-center");
-			c.classList.add("py-2");
-			c.classList.add("px-4");
-			c.classList.add("rounded");
+			c.classList.add("text-white","text-center","py-2","px-4","my-2","rounded");
 			c.classList.add("librekast-choice");
 			c.onclick = function() { libreKastVote(this); };
 			content.children[0].appendChild(c);
@@ -140,11 +185,18 @@
 	questionSocket.onmessage = function(e) {
 		console.log('received something');
 		const data = JSON.parse(e.data);
-		console.log('received : '+JSON.stringify(data['question']));
 		if(data['message']==='question-go'){
 			showQuestionText(data['question']);
+		} else if(data['message']==='results'){
+			if(data['question_type']=='QZ'){showResultsQuizz(data['results']);}
+			else if(data['question_type']=='PL'){showResultsPoll(data['results']);}
+			console.log('Show results');
+		} else if(data['message']==='question-ready'){
+			showWait();
+			console.log('not implemented yet');
 		}
-			document.querySelector('#question-message-log').textContent = (data.message + '\n');
+		
+		document.querySelector('#question-message-log').textContent = (data.message + '\n');
 
 	};
 
