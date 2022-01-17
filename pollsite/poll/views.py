@@ -62,75 +62,25 @@ def login(request,meeting_id):
 
 
 
-# return view for word clouds -> returns to "add" template
-def added(request, question_id):
-	question = get_object_or_404(Question, pk=question_id)
-	form = WordForm()
-	return render(request, 'poll/add', {'question': question,'form':form})
-
-# form view for word clouds
-def add(request, question_id):
-	question = get_object_or_404(Question, pk=question_id)
-	if request.method == 'POST':
-		form = WordForm(request.POST)
-		attendee = Attendee.objects.get(pk=request.session['attendee_id'])
-		if(form.is_valid()):
-			try:
-				existing_choice = question.choice_set.get(choice_text=form.cleaned_data['choice'])
-				# existing_choice.votes +=1
-				vote=Vote(user=attendee,choice=existing_choice) # the vote is a model to keep traces of the votes
-				vote.save()
-				# existing_choice.save() # update the vote count byt not sure if needed
-			except (KeyError, Choice.DoesNotExist):
-				added_choice = Choice(question=question, choice_text=form.cleaned_data['choice'])
-				added_choice.save()
-				vote=Vote(user=attendee,choice=added_choice)
-				vote.save()
-				# added_choice.save() # re-save to update the vote count byt not sure if needed
-			return HttpResponseRedirect(reverse('poll:added', args=(question_id,)))
+# return view for word clouds 
+def cloud(request, question_id):
+	if(not 'attendee_id' in request.session):
+		form = LoginForm()
+		return render(request,'poll/login',{'meeting':meeting,'form':form})
 	else:
+		question = get_object_or_404(Question, pk=question_id)
 		form = WordForm()
-	return render(request, 'poll/add', {'question': question,'form':form})
+		return render(request, 'poll/cloud', {'question': question,'form':form})
+
 
 # return view for Polls and Quizz
 def results(request, question_id):
-	question = get_object_or_404(Question, pk=question_id)
-	attendee = Attendee.objects.get(pk=request.session['attendee_id'])
-	context = {
-	'question': question,
-	'vote':get_previous_user_answers(attendee,question)[0]
-	}
-	return render(request, 'poll/results', context)
-
-
-# form view for Text, Polls and Quizz
-def vote(request, question_id):
-	question = get_object_or_404(Question, pk=question_id)
-	try:
-		selected_choice = question.choice_set.get(pk=request.POST['choice'])
-	except (KeyError, Choice.DoesNotExist):
-		# Redisplay the question voting form.
-		return render(request, 'poll/vote', {
-			'question': question,
-			'error_message': "You didn't select a choice.",
-		})
+	if(not 'attendee_id' in request.session):
+		form = LoginForm()
+		return render(request,'poll/login',{'meeting':meeting,'form':form})
 	else:
+		question = get_object_or_404(Question, pk=question_id)
 		attendee = Attendee.objects.get(pk=request.session['attendee_id'])
-		if(len(get_previous_user_answers(attendee,question))==0):
-			vote=Vote(user=attendee,choice=selected_choice) # the vote is a model to keep traces of the votes
-			vote.save()
-			if(selected_choice.isTrue):
-				if(question.first_correct_answer):
-					question.first_correct_answer = False
-					question.save()
-					attendee.score +=1
-				attendee.score +=1
-				attendee.save()
-		else:
-			context = {
-			'question': question,
-			'vote':get_previous_user_answers(attendee,question)[0]
-			}
-			return render(request, 'poll/results', context)
-		# selected_choice.save() # update the vote count byt not sure if needed
-		return HttpResponseRedirect(reverse('poll:results', args=(question.id,)))
+		return render(request, 'poll/results', {'question': question})
+
+

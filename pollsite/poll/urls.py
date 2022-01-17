@@ -10,7 +10,7 @@ urlpatterns = [
     path('<int:meeting_id>/meeting/', views.meeting, name='meeting'),
     path('<int:meeting_id>/login/', views.login, name='login'),
     path('<int:question_id>/results/', views.results, name='results'),
-    path('<int:question_id>/vote/', views.vote, name='vote'),
-    path('<int:question_id>/add/', views.add, name='add'),
-    path('<int:question_id>/added/', views.added, name='added'),
+    # path('<int:question_id>/vote/', views.vote, name='vote'),
+    path('<int:question_id>/cloud/', views.cloud, name='cloud'),
+    # path('<int:question_id>/added/', views.added, name='added'),
 ]

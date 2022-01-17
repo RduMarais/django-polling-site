@@ -2,6 +2,8 @@
 
 {% block title  %}Home{% endblock  %}
 
+{% load static %}
+
 {% block content  %}
 <section class="text-gray-500 bg-gray-900 body-font">
     <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
@@ -20,7 +22,7 @@
             </div>
         </div>
         <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-            <img class="object-cover object-center rounded" alt="hero" src="{{hpe.topImg}}">
+            <img class="object-cover object-center rounded" alt="hero" src="{% static 'Librekast.png' %}">
         </div>
     </div>
 </section>

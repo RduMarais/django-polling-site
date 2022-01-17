@@ -1,0 +1,39 @@
+{% extends "base_layout.html" %}
+
+{% block title  %}Word Cloud{% endblock  %}
+
+{% block content  %}
+
+<section class="text-gray-700 body-font overflow-hidden" name="current-question">
+<div id="question-div" class="container px-5 py-2 mx-auto">
+    <div class="mt-2 mb-4 text-center">
+        <span id="current-question-id" class="text-2xl librekast-WC" name="current-question-id" value="">{{ question.title }}</span>
+        <div id="question-description" class="leading-relaxed text-center text-center">
+            <p>{{ question.desc_rendered | safe }}</p>
+        </div>
+    </div>
+    <div id="question-content"></div>
+</div>
+<section>
+
+{% endblock  %}
+
+{% block javascript %}
+
+<script>
+    anychart.onDocumentReady(function() {
+        var data = [
+            {% for choice in question.choice_set.all %}
+            {"x": "{{ choice.choice_text}}", "value": {{ choice.votes }}},
+            {% endfor %}
+        ]
+        var chart = anychart.tagCloud(data);
+        console.log(JSON.stringify(data));
+
+        chart.angles([0]);
+        chart.container("question-content");
+        chart.draw();
+    });
+</script>
+
+{% endblock  %}

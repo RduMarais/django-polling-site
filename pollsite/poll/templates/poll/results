@@ -4,42 +4,31 @@
 
 {% block content  %}
 <h1>{{ question.title }}</h1>
+<div class="container px-5 py-2 mx-auto" id="question-div">
+        <div class="mt-2 mb-4 text-center">
+            <span id="current-question-id" class="text-2xl librekast-QZ" name="current-question-id" value="">{{ question.title }}</span>
+            <div id="question-description" class="leading-relaxed text-center text-center"><p>{{ question.desc_rendered | safe }}</p></div>
+        </div>
 
 {% if question.question_type == 'WC' %}
-{# TODO redirect #}
-{% elif question.question_type == 'QZ' %}
 
-<ul>
+<script>
+    document.location.href="{% url 'poll:cloud' question.id %}"; 
+</script>
+
+{% elif question.question_type == 'QZ' or question.question_type == 'PL' %}
+
+<div id="question-content">
+<ul id="choice-table">
     {% for choice in question.choice_set.all %}
-    <br>
-
-    <li>
-        {% if choice == vote.choice and not choice.isTrue %}<s>{% endif %}
-        {{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}
-        {% if choice == vote.choice and choice.isTrue  %}<b>Well done, this is the correct answer !</b>{% endif %}
-    {% if choice == vote.choice and not choice.isTrue %}</s>{% endif %}
-        {% if choice.isTrue and choice != vote.choice  %}<b>Sorry, this is the correct answer</b>{% endif %}
+    <li class="{% if not choice.isTrue %}librekast-choice bg-blue-200 text-blue-600 {% endif %}{% if choice.isTrue %}librekast-chosen bg-blue-500 text-white{% endif %} text-center py-2 px-4 my-2 rounded" >
+        {{ choice.choice_text }} <span class="text-xs px-4">{{ choice.votes }} vote{{ choice.votes|pluralize }}</span>
     </li>
     {% endfor %}
 </ul>
-
-{% else %}
-
-<ul>
-    {% for choice in question.choice_set.all %}
-    <br>
-
-    <li>
-        {{ choice.choice_text }} -- {{ choice.votes }} vote{{ choice.votes|pluralize }}
-    </li>
-    {% endfor %}
-</ul>
+</div>
 
 {% endif %}
 
-<h1>the looks of this page sucks!! TODO
-</h1>
-<br>
-<a href="https://github.com/aahnik/django-polling_site">GitHub Repo</a>
 
 {% endblock  %}

@@ -20,8 +20,6 @@
 	<div class="container px-5 py-24 mx-auto text-center" id="start-div">
 		<button id="question-start" value="question-start" class="bg-red-600 hover:bg-red-800 text-white text-center font-bold py-2 px-4 rounded">START</button>
 	</div>
-		<br/>
-		TEST DEBUG MESSAGE : <span id="question-message-log"></span>
 </section>
 
 {% if previous_question_list %}
@@ -35,7 +33,7 @@
 				<div class="md:flex-grow">
 					<h2 class="text-1xl font-medium text-gray-900 title-font">{{question.title }}<span class="mx-2 text-gray-500 text-sm">{{question.participants}} Votes </span>
 					{% if question.question_type == 'WC' %}
-					<a href="{% url 'poll:add' question.id %}" class="text-green-500 inline-flex items-center mx-2 text-sm">
+					<a href="{% url 'poll:cloud' question.id %}" class="text-green-500 inline-flex items-center mx-2 text-sm">
 					{% else %}
 					<a href="{% url 'poll:results' question.id %}" class="text-green-500 inline-flex items-center mt-4 text-sm">
 					{% endif %}
@@ -258,7 +256,7 @@
 		wcForm.classList.add("inline-flex","w-full","border");
 		wcInput = document.createElement("input");
 		wcButton = document.createElement("button");
-		wcButton.classList.add("w-1/12","pt-2","p-1","bg-indigo-300","hover:bg-indigo-100","text-indigo-800","");
+		wcButton.classList.add("w-1/12","pt-2","p-1","bg-indigo-300","hover:bg-indigo-100","text-indigo-800");
 		wcButton.innerText = "ADD";
 		wcButton.id = "librekast-add";
 		wcButton.onclick=function(item){
@@ -318,7 +316,6 @@
 
 	//main fuction : receive messages
 	questionSocket.onmessage = function(e) {
-		// console.log('received data : '+e.data);
 		const data = JSON.parse(e.data);
 		if(data['message']==='question-go'){
 			showQuestionText(data['question']);
@@ -354,7 +351,6 @@
 	document.querySelector('#question-start').onclick = function(e) {
 		const messageInputDom = document.querySelector('#question-start');
 		const message = messageInputDom.value;
-		// this should be removed to have asynchronous receive of question
 		questionSocket.send(JSON.stringify({
 			'message': message, 
 		}));
@@ -364,7 +360,6 @@
 		const startDivNode = document.querySelector('#start-div');
 		startDivNode.remove()
 		showWait();
-		// console.log('sent :'+message);
 	};
 
 </script>
