@@ -2,4 +2,7 @@
 *.pyc
 __pycache__
 pollsite/media/*
+pollsite/static/*
+!pollsite/static/LibreKast.png
+!pollsite/static/favicon.ico
 pollsite/db.sqlite3
