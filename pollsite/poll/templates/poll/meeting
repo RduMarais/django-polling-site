@@ -208,17 +208,8 @@
 		console.log('done update poll');
 	}
 
-	function updateWordCloud(){
-		// don't forget to remove when updating (or redraw chart, in this case move this)
-		content = document.createElement("div");
-		content.id = "question-content";
-		document.querySelector('#question-div').appendChild(content);
+	function updateWordCloud(title){
 
-		var chart = anychart.tagCloud(wordCloudData);
-		chart.title(questionObj['title']);
-		chart.angles([0]);
-		chart.container("question-content");
-		chart.draw();
 	}
 
 	function wcSendWord(word){
@@ -227,10 +218,11 @@
 
 	// NOT TESTED
 	function showWordCloud(questionObj){
-		wordCloudData = questionObj['data'];
+		console.log('start WC');
+		wordCloudData = questionObj['choices'];
 
 		// show form 
-		wcForm = document.createElement("div"); //this is not a form it's dynamic
+		wcForm = document.createElement("div"); // not a form it's dynamic
 		wcForm.id = "question-form";
 		wcInput = document.createElement("input");
 		wcButton = document.createElement("button");
@@ -247,11 +239,23 @@
 		}
 		wcForm.appendChild(wcInput);
 		wcForm.appendChild(wcButton);
+		console.log('created Form')
 
 		document.querySelector('#question-div').appendChild(wcForm);
 
 		// show results
-		updateWordCloud();
+		content = document.createElement("div");
+		content.id = "question-content";
+		document.querySelector('#question-div').appendChild(content);
+		console.log('created content');
+
+		var chart = anychart.tagCloud(wordCloudData);
+		console.log(JSON.stringify(wordCloudData));
+		chart.title(questionObj['title']); //ça c'est bon
+		chart.angles([0]);
+		chart.container("question-content");
+		chart.draw();
+		console.log('WC drawn');
 	}
 
 	function showChoices(choicesArray){

@@ -94,8 +94,6 @@ class QuestionConsumer(WebsocketConsumer):
 				elif(question.question_type =='PL'):
 					print('WS async notif update poll start')
 					self.send_results(question)
-					# OK
-					# async update all users
 					self.notify_update_PL(question,choice)
 			else:
 				message_out = {'message':'error : already voted'}
@@ -116,12 +114,20 @@ class QuestionConsumer(WebsocketConsumer):
 				'choices':[]
 			},
 		}
-		for choice in question.choice_set.all():
-			choice_obj = {
-				'id':choice.id,
-				'text':choice.choice_text,
-			}
-			message_out['question']['choices'].append(choice_obj)
+		if(question.question_type == 'WC'):
+			for choice in question.choice_set.all():
+				choice_obj = {
+					'x':choice.choice_text,
+					'value':choice.votes(),
+				}
+				message_out['question']['choices'].append(choice_obj)
+		else:
+			for choice in question.choice_set.all():
+				choice_obj = {
+					'id':choice.id,
+					'text':choice.choice_text,
+				}
+				message_out['question']['choices'].append(choice_obj)
 		print(message_out)
 		self.send(text_data=json.dumps(message_out))
 
