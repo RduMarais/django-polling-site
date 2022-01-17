@@ -8,16 +8,15 @@
 	<div class="text-center py-4">
 		<p>{{ meeting.desc_rendered | safe }}</p>
 	</div>
-	<div class="py-2" style="text-align: right; margin-right:20px;">
+	<div class="mr-2 text-right text-xs">
 		<p>{{ attendee.name }} : {{ attendee.score }} points</p>
 	</div>
 </section>
 
-{% if current_question %}
 <section class="text-gray-700 body-font overflow-hidden" name="current-question">
-	<div class="container px-5 py-24 mx-auto" id="question-div">
-		<div class="-my-8 text-2xl text-center">
-			<span id="current-question-id" name="current-question-id" value=""></span>
+	<div class="container px-5 py-2 mx-auto" id="question-div">
+		<div class="mt-2 mb-4 text-center">
+			<span id="current-question-id" class="text-2xl" name="current-question-id" value=""></span>
 			<div id="question-description" class="leading-relaxed text-center text-center"></div>
 		</div>
 	</div>
@@ -27,7 +26,6 @@
 		<br/>
 		TEST DEBUG MESSAGE : <span id="question-message-log"></span>
 </section>
-{% endif %}
 
 {% if previous_question_list %}
 <section class="text-gray-700 body-font overflow-hidden" name="previous_questions">
@@ -258,12 +256,13 @@
 		wcForm.id = "question-form";
 		wcInput = document.createElement("input");
 		wcButton = document.createElement("button");
-		wcButton.classList.add("bg-rose-400","hover:bg-rose-700","text-white","text-center","py-2","px-4","my-2","rounded");
+		wcButton.classList.add("w-1/12","pt-2","bg-indigo-100","hover:bg-indigo-300","text-indigo-800");
 		wcButton.id = "librekast-add";
 		wcButton.onclick=function(item){
 			wcSendWord(wcInput.value);
 		}
 		wcInput.id="librekast-input";
+		wcInput.classList.add("w-full","px-4","py-2","rounded","focus:outline-none","focus:text-gray-600");
 		wcInput.onkeypress = function(event){
 			if(event.keyCode == 13){
 				wcSendWord(wcInput.value);
