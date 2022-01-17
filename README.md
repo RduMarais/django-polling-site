@@ -38,6 +38,7 @@ CLIENT                                     SERVER                           GROU
   |          --> question-start -->           |                               |
   |                                    get current question                   |
   |             <-- question-go <--           |                               |
+ if Poll/Quizz :                              |                               |
  showQuestion                                 |                               |
   |                                           |                               |
   |          --> vote -->                     |                               |
@@ -47,14 +48,16 @@ CLIENT                                     SERVER                           GROU
 showResultsPoll                               |                           updatePoll
   |                                           |                               |
   |                                           |                               |
+ if Word Cloud :                              |                               |
+ showWordCloud                                |                               |
+  |          --> word-cloud-add -->           |                               |
+  |                                        add vote                           |
+  |                                           |   --> notify-update-cloud-->  |
+  |                                           |                               |
+  |                                           |                               |
   wait for results                            |                               |
   |          --> debug-results  -->           |                               |
   |                <-- results <--            |                               |
-  |                                           |                               |
-  |                                           |                               |
-  |                                           |                               |
-  |                                           |                               |
-  |                                           |                               |
   |                                           |                               |
   |                                           |                               |
 ```

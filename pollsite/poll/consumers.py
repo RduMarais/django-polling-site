@@ -57,7 +57,7 @@ class QuestionConsumer(WebsocketConsumer):
 			print('WS received get-results')
 			question = self.meeting.current_question()
 			self.send_results(question)
-		elif(message_in == "word-cloud-update"):
+		elif(message_in == "word-cloud-add"):
 			print("WS received Word Cloud update")
 			async_to_sync(self.add_word(text_data_json['word']))
 			async_to_sync(self.notify_add_word(text_data_json['word']))

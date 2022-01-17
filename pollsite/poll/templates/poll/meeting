@@ -243,7 +243,7 @@
 	function wcSendWord(word){
 		console.log('sending added choice');
 		questionSocket.send(JSON.stringify({
-			'message': "word-cloud-update", 
+			'message': "word-cloud-add", 
 			'word':word,
 		}));
 		console.log('sent : '+word);
