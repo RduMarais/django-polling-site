@@ -18,6 +18,7 @@ django-polling_site ( Life's First Django Project)
      * [ ] front : showWait()
      * [x] poll results synchros
      * [x] WC 
+     * [ ] front : showWait and show previous question and iterate points
      * [ ] back : sync notificaton from admin 
      * [ ] back : admin widget for handling question order
      * rewrite code as async if needed
@@ -58,6 +59,9 @@ showResultsPoll                               |                           update
   |          --> debug-results  -->           |                               |
   |                <-- results <--            |                               |
   |                                           |                               |
+ wait for score                               |                               |
+  |          --> debug-score  -->             |                               |
+  |           <-- update-score <--            |                               |
   |                                           |                               |
 ```
 

@@ -53,6 +53,12 @@ class QuestionConsumer(WebsocketConsumer):
 		elif(message_in == "vote"):
 			print('WS received vote')
 			async_to_sync(self.receive_vote(text_data_json))
+		elif(message_in == "debug-score"):
+			self.send(text_data=json.dumps({
+				'message':'update-score',
+				'score':self.attendee.score,
+				}))
+			print('WS received get-score')
 		elif(message_in == "debug-results"):
 			print('WS received get-results')
 			question = self.meeting.current_question()

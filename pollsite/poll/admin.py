@@ -18,7 +18,7 @@ class ChoiceInline(admin.TabularInline):
 # Question admin panel
 class QuestionAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['question_type','is_done']}),
+        (None, {'fields': ['question_type','is_done','meeting']}),
         ('Question Information', {'fields': ['title', 'desc']}),
         ('Date Information', {'fields': ['pub_date']}),
     ]
