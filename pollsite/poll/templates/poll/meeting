@@ -80,14 +80,14 @@
 	}
 
 	function libreKastVote(choice){
-		console.log('clicked : '+choice.innerText);
+		// console.log('clicked : '+choice.innerText);
 		message_out = JSON.stringify({
 			'message': "vote",
 			'question':questionTitle.value,
 			'choice':choice.value ,
 		});
 		questionSocket.send(message_out);
-		console.log('send : '+message_out);
+		// console.log('send : '+message_out);
 
 		choice.onclick="";
 		choice.classList.replace('librekast-choice','librekast-chosen'); 
@@ -95,10 +95,10 @@
 		choice.classList.add("bg-blue-500","text-white");
 		choice.classList.add("text-center","py-2","px-4","my-2","rounded");
 		let choiceButtons = document.getElementsByClassName('librekast-choice');
-		console.log(choiceButtons.length);
+		// console.log(choiceButtons.length);
 		for(let a in choiceButtons){
 			choiceButtons[a].className ="librekast-choice"; 
-			console.log('choice button : '+choiceButtons[a].innerText);
+			// console.log('choice button : '+choiceButtons[a].innerText);
 			choiceButtons[a].classList.add("bg-blue-200","text-blue-600");
 			choiceButtons[a].classList.add("text-center","py-2","px-4","my-2","rounded");
 			choiceButtons[a].onclick="";
@@ -186,7 +186,7 @@
 	}
 
 	function updatePollPercentage(voteBar,totalCount){
-		console.log(voteBar.id + "updating");
+		// console.log(voteBar.id + "updating");
 		voteCount = parseInt(voteBar.innerText.split()[0]);
 		percent = (voteCount / totalCount) *100 ;
 		voteBar.style.width = percent+"%";
@@ -205,20 +205,52 @@
 			updatePollPercentage(item,totalCount);
 		});
 		totalCountElmt.innerText = totalCount + " votes";
-		console.log('done update poll');
+		// console.log('done update poll');
 	}
 
-	function updateWordCloud(title){
+	function updateWordCloud(word){
+		//updte value array
+		let b = false;
+		//if word exists
+		let obj = wordCloudData.find((o, i) => {
+    		if (o.x === word) {
+        		o.value++;
+        		b = true;
+        		return true;
+    		}
+		});
+		//add word to data if non existent
+		if(!b){
+			let n = {'x':word,'value':1};
+			wordCloudData.push(n);
+		}
+
+		//remove old graph
+		ocontent = document.querySelector('#question-content');
+		ocontent.remove();
+		//show ne graph
+		ncontent = document.createElement("div");
+		ncontent.id = "question-content";
+		document.querySelector('#question-div').appendChild(ncontent);
+
+		var chart = anychart.tagCloud(wordCloudData);
+		chart.angles([0]);
+		chart.container("question-content");
+		chart.draw();
 
 	}
 
 	function wcSendWord(word){
-		console.log('TODO');
+		console.log('sending added choice');
+		questionSocket.send(JSON.stringify({
+			'message': "word-cloud-update", 
+			'word':word,
+		}));
+		console.log('sent : '+word);
 	}
 
-	// NOT TESTED
 	function showWordCloud(questionObj){
-		console.log('start WC');
+		// console.log('start WC');
 		wordCloudData = questionObj['choices'];
 
 		// show form 
@@ -239,7 +271,7 @@
 		}
 		wcForm.appendChild(wcInput);
 		wcForm.appendChild(wcButton);
-		console.log('created Form')
+		// console.log('created Form')
 
 		document.querySelector('#question-div').appendChild(wcForm);
 
@@ -247,15 +279,15 @@
 		content = document.createElement("div");
 		content.id = "question-content";
 		document.querySelector('#question-div').appendChild(content);
-		console.log('created content');
+		// console.log('created content');
 
 		var chart = anychart.tagCloud(wordCloudData);
-		console.log(JSON.stringify(wordCloudData));
-		chart.title(questionObj['title']); //ça c'est bon
+		// console.log(JSON.stringify(wordCloudData));
+		// chart.title(questionObj['title']);
 		chart.angles([0]);
 		chart.container("question-content");
 		chart.draw();
-		console.log('WC drawn');
+		// console.log('WC drawn');
 	}
 
 	function showChoices(choicesArray){
@@ -284,20 +316,23 @@
 
 	//main fuction : receive messages
 	questionSocket.onmessage = function(e) {
-		console.log('received data : '+e.data);
+		// console.log('received data : '+e.data);
 		const data = JSON.parse(e.data);
 		if(data['message']==='question-go'){
 			showQuestionText(data['question']);
 		} else if(data['message']==='results'){
 			if(data['question_type']=='QZ'){showResultsQuizz(data['results']);}
 			else if(data['question_type']=='PL'){showResultsPoll(data['results'],data['total']);}
-			console.log('Show results');
+			// console.log('Show results');
 		} else if(data['message']==='question-ready'){
 			showWait();
-			console.log('not implemented yet');
+			// console.log('not implemented yet');
 		} else if(data['message']==='notify-update-poll'){
 			updatePoll(data['vote']);
-			console.log('notify-update-poll');
+			// console.log('notify-update-poll');
+		}else if(data['message']==='notify-update-cloud'){
+			updateWordCloud(data['vote']);
+			console.log('UPDATE WORD CLOUD with word : '+data['vote']);
 		}
 		
 		document.querySelector('#question-message-log').textContent = (data.message + '\n');
@@ -320,7 +355,7 @@
 		const startDivNode = document.querySelector('#start-div');
 		startDivNode.remove()
 		showWait();
-		console.log('sent :'+message);
+		// console.log('sent :'+message);
 	};
 
 </script>

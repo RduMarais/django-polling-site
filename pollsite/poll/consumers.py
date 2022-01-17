@@ -46,8 +46,6 @@ class QuestionConsumer(WebsocketConsumer):
 		text_data_json = json.loads(text_data)
 		message_in = text_data_json['message']  # this is the format that should be modified
 
-
-		# si recoit message : question-test -> changer pour Next question
 		if(message_in == "question-start"):
 			print('WS received question test ok')
 			question = self.meeting.current_question()
@@ -59,13 +57,19 @@ class QuestionConsumer(WebsocketConsumer):
 			print('WS received get-results')
 			question = self.meeting.current_question()
 			self.send_results(question)
+		elif(message_in == "word-cloud-update"):
+			print("WS received Word Cloud update")
+			async_to_sync(self.add_word(text_data_json['word']))
+			async_to_sync(self.notify_add_word(text_data_json['word']))
 		else:
 			message_out = "{'message':'error'}"
 			print(message_out)
 			self.send(text_data=message_out)
 
 
-	###### Functional logic #####
+
+
+###### Functional logic #####
 
 	# sync method
 	def receive_vote(self,text_data_json):
@@ -101,6 +105,24 @@ class QuestionConsumer(WebsocketConsumer):
 		except:
 			message_out = {'message':'error : something happened'}
 			self.send(text_data=json.dumps(message_out)) #
+
+	# sync method
+	def add_word(self,word):
+		question = self.meeting.current_question()
+		print('Vote : adding word '+word)
+		# TODO : bleach
+		word_cleaned = word
+		try:
+			existing_word = question.choice_set.get(choice_text=word_cleaned)
+			vote=Vote(user=self.attendee,choice=existing_word)
+			vote.save()
+			print('Vote : added word '+word)
+		except:
+			added_word = Choice(question=question, choice_text=word_cleaned)
+			added_word.save()
+			vote=Vote(user=self.attendee,choice=added_word) # the vote is a model to keep traces of the votes
+			vote.save()
+			print('Vote : added word '+word)
 
 
 	def send_question(self,question):
@@ -149,6 +171,20 @@ class QuestionConsumer(WebsocketConsumer):
 		print(message_out)
 		self.send(text_data=json.dumps(message_out))
 
+	def notify_add_word(self,word):
+		print('WS start notify update WC')
+		async_to_sync(self.channel_layer.group_send)(
+			self.meeting_group_name,
+			{
+				'type': 'meeting_message',
+				'message': {
+					'message':'notify-update-cloud',
+					'vote': word,
+				}
+			}
+		)
+
+	# TODO remove question 
 	def notify_update_PL(self,question,choice):
 		print("WS start notify update Poll")
 		async_to_sync(self.channel_layer.group_send)(
