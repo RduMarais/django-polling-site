@@ -18,16 +18,17 @@ django-polling_site ( Life's First Django Project)
      * [ ] front : showWait()
      * [x] poll results synchros
      * [x] WC 
-     * [ ] front : showWait and show previous question and iterate points
+     * [ ] front : showWait and show previous question
      * [ ] back : sync notificaton from admin 
      * [ ] back : admin widget for handling question order
-     * rewrite code as async if needed
-     * some failsafes in front end
+     * [ ] some failsafes in front end
  * [ ] TUTO deployment & customization
+ * [ ] testing
  * [ ] home as django models (for non-technical people)
+ * [ ] FR translation
  * [ ] docker wrapping
  * [ ] django app wrapping
- * [ ] FR translation
+ * [ ] dark mode with tailwind CSS
 
 ## (channels branch) State diagram 
 

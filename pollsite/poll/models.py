@@ -27,6 +27,9 @@ class Meeting(models.Model):
 	date_end = models.DateTimeField('End time of the meeting',default=timezone.now()+datetime.timedelta(hours=2))
 	image = models.ImageField('Image for your meeting',null = True)
 
+	def __str__(self):
+		return self.title
+
 	def activities(self):
 		return len(self.question_set.all())
 
